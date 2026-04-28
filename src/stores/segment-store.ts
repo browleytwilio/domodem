@@ -10,6 +10,19 @@ import type {
 } from "@/lib/segment/types";
 import { loadEvents, saveEvents, clearEvents, EVENT_LOG_MAX } from "@/lib/segment/storage";
 
+let saveTimer: ReturnType<typeof setTimeout> | null = null;
+function scheduleSave(events: LoggedEvent[]) {
+  if (typeof window === "undefined") {
+    saveEvents(events);
+    return;
+  }
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    saveEvents(events);
+  }, 300);
+}
+
 const DEFAULT_COMPUTED: ComputedTraits = {
   lifetime_orders: 0,
   lifetime_spend: 0,
@@ -78,13 +91,14 @@ export const useSegmentStore = create<SegmentState>()(
       appendEvent: (event) =>
         set((state) => {
           const next = [...state.events, event].slice(-EVENT_LOG_MAX);
-          saveEvents(next);
+          scheduleSave(next);
           return { events: next };
         }),
 
       hydrateEvents: () => {
         const existing = loadEvents();
-        if (existing.length > 0) set({ events: existing });
+        if (existing.length === 0) return;
+        set((state) => (state.events.length === 0 ? { events: existing } : state));
       },
 
       clear: () => {
@@ -123,7 +137,7 @@ export const useSegmentStore = create<SegmentState>()(
       mergeTraits: (traits) =>
         set((state) => ({ traits: { ...state.traits, ...traits } })),
       resetIdentity: () =>
-        set({ userId: null, traits: {} }),
+        set({ userId: null, anonymousId: null, traits: {} }),
 
       setDemoMode: (enabled) => set({ demoModeEnabled: enabled }),
       setInspectorOpen: (inspectorOpen) => set({ inspectorOpen }),
