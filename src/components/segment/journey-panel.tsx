@@ -15,7 +15,7 @@ export function JourneyPanel() {
         <h3 className="font-semibold">Customer Journey</h3>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+      <div className="grid gap-6 @3xl/inspector:grid-cols-[1fr_1fr]">
       <ol className="relative ml-3 border-l-2 border-muted">
         {JOURNEY_STAGES.map((s, idx) => {
           const reached = idx <= currentIdx;

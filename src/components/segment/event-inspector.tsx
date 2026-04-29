@@ -23,7 +23,7 @@ export function EventInspector() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col p-0 sm:max-w-[1040px] lg:max-w-[1280px] xl:max-w-[1440px]"
+        className="@container/inspector flex w-full max-w-none flex-col p-0 sm:w-1/2 sm:min-w-[640px]"
       >
         <header className="flex items-center justify-between border-b px-6 py-4 pr-12">
           <div className="flex items-center gap-2">
@@ -42,7 +42,7 @@ export function EventInspector() {
           onValueChange={(v) => setTab(v as typeof tab)}
           className="flex flex-1 min-h-0 flex-col gap-0"
         >
-          <TabsList className="mx-6 mt-3 flex h-10 w-fit items-center gap-1">
+          <TabsList className="mx-6 mt-3 flex h-10 w-fit items-center gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <TabsTrigger value="events" className="gap-1.5 px-3 text-sm">
               <Radio className="h-4 w-4" />
               Events

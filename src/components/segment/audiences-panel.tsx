@@ -31,7 +31,7 @@ export function AudiencesPanel() {
         Evaluated live from this session&apos;s events + computed traits. Crossing an audience boundary fires an <code>Audience Entered</code> / <code>Audience Exited</code> track call.
       </p>
 
-      <div className="grid gap-2 lg:grid-cols-2">
+      <div className="grid gap-2 @3xl/inspector:grid-cols-2">
         {AUDIENCES.map((def) => {
           const isMember = active.has(def.id);
           const membership = audiences.find((a) => a.id === def.id);

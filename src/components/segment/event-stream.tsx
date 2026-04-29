@@ -49,7 +49,7 @@ export function EventStream() {
   }, [events, kind, query]);
 
   return (
-    <div className="grid h-full grid-cols-1 md:grid-cols-[380px_1fr]">
+    <div className="grid h-full grid-cols-1 @3xl/inspector:grid-cols-[360px_1fr]">
       {/* Left: list + filters */}
       <div className="flex h-full min-h-0 flex-col border-r">
         <div className="flex flex-col gap-2 border-b p-3">
