@@ -30,6 +30,13 @@ function newId(): string {
 }
 
 async function getIdentity(): Promise<{ userId: string | null; anonymousId: string | null }> {
+  // Prefer the store: it's updated synchronously by identify()/reset(), so
+  // subsequent track() calls always see the latest identity even before the
+  // real SDK's async identify has resolved.
+  const state = useSegmentStore.getState();
+  if (state.userId || state.anonymousId) {
+    return { userId: state.userId, anonymousId: state.anonymousId };
+  }
   try {
     const [a] = await realAnalytics;
     const user = a.user();
