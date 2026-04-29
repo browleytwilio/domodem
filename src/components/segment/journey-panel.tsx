@@ -9,12 +9,13 @@ export function JourneyPanel() {
   const currentIdx = JOURNEY_STAGES.findIndex((s) => s.stage === journey.stage);
 
   return (
-    <div className="flex flex-col gap-4 p-4 text-sm">
+    <div className="flex flex-col gap-4 p-6 text-sm">
       <div className="flex items-center gap-2">
         <Route className="h-4 w-4 text-muted-foreground" />
         <h3 className="font-semibold">Customer Journey</h3>
       </div>
 
+      <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
       <ol className="relative ml-3 border-l-2 border-muted">
         {JOURNEY_STAGES.map((s, idx) => {
           const reached = idx <= currentIdx;
@@ -62,6 +63,7 @@ export function JourneyPanel() {
           ))}
         </ol>
       </section>
+      </div>
     </div>
   );
 }

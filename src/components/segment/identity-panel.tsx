@@ -28,7 +28,8 @@ export function IdentityPanel() {
   const traitEntries = Object.entries(traits);
 
   return (
-    <div className="flex flex-col gap-4 p-4 text-sm">
+    <div className="flex flex-col gap-4 p-6 text-sm">
+      <div className="grid gap-4 lg:grid-cols-[1fr_1.4fr]">
       <section className="rounded-lg border bg-card p-4">
         <div className="mb-3 flex items-center gap-2">
           <UserCircle className="h-4 w-4 text-muted-foreground" />
@@ -97,6 +98,7 @@ export function IdentityPanel() {
           </div>
         )}
       </section>
+      </div>
 
       <section className="rounded-lg border bg-card p-4">
         <h3 className="mb-3 font-semibold">Identity timeline</h3>

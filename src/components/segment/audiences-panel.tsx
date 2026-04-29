@@ -20,7 +20,7 @@ export function AudiencesPanel() {
     .reverse();
 
   return (
-    <div className="flex flex-col gap-3 p-4 text-sm">
+    <div className="flex flex-col gap-3 p-6 text-sm">
       <div className="flex items-center gap-2">
         <Users className="h-4 w-4 text-muted-foreground" />
         <h3 className="font-semibold">
@@ -31,7 +31,7 @@ export function AudiencesPanel() {
         Evaluated live from this session&apos;s events + computed traits. Crossing an audience boundary fires an <code>Audience Entered</code> / <code>Audience Exited</code> track call.
       </p>
 
-      <div className="flex flex-col gap-2">
+      <div className="grid gap-2 lg:grid-cols-2">
         {AUDIENCES.map((def) => {
           const isMember = active.has(def.id);
           const membership = audiences.find((a) => a.id === def.id);

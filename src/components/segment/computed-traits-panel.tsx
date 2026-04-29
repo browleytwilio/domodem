@@ -26,7 +26,7 @@ export function ComputedTraitsPanel() {
   ];
 
   return (
-    <div className="flex flex-col gap-3 p-4 text-sm">
+    <div className="flex flex-col gap-3 p-6 text-sm">
       <div className="flex items-center gap-2">
         <Calculator className="h-4 w-4 text-muted-foreground" />
         <h3 className="font-semibold">Computed Traits</h3>
@@ -34,11 +34,11 @@ export function ComputedTraitsPanel() {
       <p className="text-xs text-muted-foreground">
         These traits are derived client-side from the event log. In production, Segment&apos;s CDP computes equivalent traits server-side and syncs them to every destination.
       </p>
-      <dl className="divide-y rounded-lg border bg-card">
+      <dl className="grid grid-cols-1 gap-x-6 rounded-lg border bg-card px-4 py-2 lg:grid-cols-2">
         {rows.map((r) => (
           <div
             key={r.label}
-            className="grid grid-cols-[1fr_auto] gap-3 px-3 py-2"
+            className="grid grid-cols-[1fr_auto] gap-3 border-b py-2 last:border-b-0 lg:[&:nth-last-child(-n+2)]:border-b-0"
           >
             <dt className="text-muted-foreground">{r.label}</dt>
             <dd className="font-mono text-xs font-semibold">{r.value}</dd>

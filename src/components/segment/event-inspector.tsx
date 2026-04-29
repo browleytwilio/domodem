@@ -23,9 +23,9 @@ export function EventInspector() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col p-0 sm:max-w-[900px] lg:max-w-[1100px]"
+        className="flex w-full flex-col p-0 sm:max-w-[1040px] lg:max-w-[1280px] xl:max-w-[1440px]"
       >
-        <header className="flex items-center justify-between border-b px-4 py-3">
+        <header className="flex items-center justify-between border-b px-6 py-4 pr-12">
           <div className="flex items-center gap-2">
             <Radio className="h-4 w-4 text-emerald-600" />
             <SheetTitle className="text-base font-semibold">
@@ -42,27 +42,31 @@ export function EventInspector() {
           onValueChange={(v) => setTab(v as typeof tab)}
           className="flex flex-1 min-h-0 flex-col gap-0"
         >
-          <TabsList className="mx-4 mt-3 grid h-9 w-fit grid-cols-5">
-            <TabsTrigger value="events" className="gap-1.5">
-              <Radio className="h-3.5 w-3.5" />
+          <TabsList className="mx-6 mt-3 flex h-10 w-fit items-center gap-1">
+            <TabsTrigger value="events" className="gap-1.5 px-3 text-sm">
+              <Radio className="h-4 w-4" />
               Events
-              <span className="ml-1 rounded-full bg-muted px-1.5 text-[10px]">{eventCount}</span>
+              <span className="ml-1 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-medium tabular-nums">
+                {eventCount}
+              </span>
             </TabsTrigger>
-            <TabsTrigger value="audiences" className="gap-1.5">
-              <Users className="h-3.5 w-3.5" />
+            <TabsTrigger value="audiences" className="gap-1.5 px-3 text-sm">
+              <Users className="h-4 w-4" />
               Audiences
-              <span className="ml-1 rounded-full bg-muted px-1.5 text-[10px]">{audienceCount}</span>
+              <span className="ml-1 rounded-full bg-muted px-1.5 py-0.5 text-[11px] font-medium tabular-nums">
+                {audienceCount}
+              </span>
             </TabsTrigger>
-            <TabsTrigger value="identity" className="gap-1.5">
-              <UserCircle className="h-3.5 w-3.5" />
+            <TabsTrigger value="identity" className="gap-1.5 px-3 text-sm">
+              <UserCircle className="h-4 w-4" />
               Identity
             </TabsTrigger>
-            <TabsTrigger value="journey" className="gap-1.5">
-              <Route className="h-3.5 w-3.5" />
+            <TabsTrigger value="journey" className="gap-1.5 px-3 text-sm">
+              <Route className="h-4 w-4" />
               Journey
             </TabsTrigger>
-            <TabsTrigger value="computed" className="gap-1.5">
-              <Calculator className="h-3.5 w-3.5" />
+            <TabsTrigger value="computed" className="gap-1.5 px-3 text-sm">
+              <Calculator className="h-4 w-4" />
               Traits
             </TabsTrigger>
           </TabsList>
