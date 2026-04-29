@@ -4,11 +4,39 @@ import type { LoggedEvent } from "./types";
 import { useSegmentStore } from "@/stores/segment-store";
 
 const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || "";
+const analyticsEnabled = writeKey.length > 0;
 
+// When no write key is configured, pass `disable: true` so the SDK returns a
+// NullAnalytics instance. Otherwise it would attempt to load CDN settings from
+// `/v1/projects//settings`, which rejects and breaks every .track/.identify
+// await downstream. The local store + inspector are the source of truth for
+// the demo regardless of whether the real SDK is enabled.
 const realAnalytics = AnalyticsBrowser.load(
-  { writeKey },
-  { initialPageview: false },
+  { writeKey: writeKey || "demo-placeholder" },
+  {
+    initialPageview: false,
+    disable: !analyticsEnabled,
+  },
 );
+
+if (typeof window !== "undefined") {
+  if (analyticsEnabled) {
+    console.info("[segment] Analytics enabled");
+  } else {
+    console.info(
+      "[segment] Analytics disabled — NEXT_PUBLIC_SEGMENT_WRITE_KEY not set; demo runs locally",
+    );
+  }
+}
+
+async function safeAwait<T>(p: PromiseLike<T>): Promise<T | null> {
+  try {
+    return await p;
+  } catch (err) {
+    console.warn("[segment] SDK call failed (demo unaffected):", err);
+    return null;
+  }
+}
 
 const CHANNEL_NAME = "segment-demo-events";
 
@@ -37,8 +65,10 @@ async function getIdentity(): Promise<{ userId: string | null; anonymousId: stri
   if (state.userId || state.anonymousId) {
     return { userId: state.userId, anonymousId: state.anonymousId };
   }
+  const resolved = await safeAwait(realAnalytics);
+  if (!resolved) return { userId: null, anonymousId: null };
   try {
-    const [a] = await realAnalytics;
+    const [a] = resolved;
     const user = a.user();
     return {
       userId: user.id() ?? null,
@@ -68,7 +98,7 @@ export const analytics = {
       receivedAt: Date.now(),
     };
     record(event);
-    await realAnalytics.track(name, properties);
+    await safeAwait(realAnalytics.track(name, properties));
   },
 
   async identify(userId: string, traits?: object): Promise<void> {
@@ -86,7 +116,7 @@ export const analytics = {
     const store = useSegmentStore.getState();
     store.setIdentity(userId, anonymousId);
     if (traits) store.mergeTraits(traits as Record<string, unknown>);
-    await realAnalytics.identify(userId, traits);
+    await safeAwait(realAnalytics.identify(userId, traits));
   },
 
   async page(
@@ -106,7 +136,7 @@ export const analytics = {
       receivedAt: Date.now(),
     };
     record(event);
-    await realAnalytics.page(category, name, properties);
+    await safeAwait(realAnalytics.page(category, name, properties));
   },
 
   async group(groupId: string, traits?: object): Promise<void> {
@@ -122,7 +152,7 @@ export const analytics = {
       receivedAt: Date.now(),
     };
     record(event);
-    await realAnalytics.group(groupId, traits);
+    await safeAwait(realAnalytics.group(groupId, traits));
   },
 
   async alias(userId: string, previousId?: string): Promise<void> {
@@ -137,7 +167,7 @@ export const analytics = {
       receivedAt: Date.now(),
     };
     record(event);
-    await realAnalytics.alias(userId, previousId);
+    await safeAwait(realAnalytics.alias(userId, previousId));
   },
 
   async reset(): Promise<void> {
@@ -149,8 +179,14 @@ export const analytics = {
     };
     record(event);
     useSegmentStore.getState().resetIdentity();
-    const [a] = await realAnalytics;
-    a.reset();
+    const resolved = await safeAwait(realAnalytics);
+    if (resolved) {
+      try {
+        resolved[0].reset();
+      } catch {
+        // demo unaffected
+      }
+    }
   },
 };
 
