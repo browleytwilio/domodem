@@ -42,7 +42,7 @@ export function RegisterForm() {
     setLoading(true);
 
     try {
-      const { error: signUpError } = await authClient.signUp.email({
+      const { data, error: signUpError } = await authClient.signUp.email({
         email,
         password,
         name,
@@ -55,10 +55,13 @@ export function RegisterForm() {
       }
 
       trackSignedUp("email", email);
-      try {
-        trackAlias(email);
-      } catch {
-        // alias is best-effort
+      const newUserId = data?.user?.id;
+      if (newUserId) {
+        try {
+          trackAlias(newUserId);
+        } catch {
+          // alias is best-effort
+        }
       }
       router.push("/menu");
     } catch {

@@ -23,7 +23,7 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      const { error: signInError } = await authClient.signIn.email({
+      const { data, error: signInError } = await authClient.signIn.email({
         email,
         password,
       });
@@ -35,10 +35,13 @@ export function LoginForm() {
       }
 
       trackSignedIn("email");
-      try {
-        trackAlias(email);
-      } catch {
-        // alias is best-effort; don't block login
+      const newUserId = data?.user?.id;
+      if (newUserId) {
+        try {
+          trackAlias(newUserId);
+        } catch {
+          // alias is best-effort; don't block login
+        }
       }
       router.push("/menu");
     } catch {
