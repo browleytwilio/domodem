@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { trackSignedOut, identifyUser } from "@/lib/analytics/events";
+import { useSegmentStore } from "@/stores/segment-store";
 
 const accountCards = [
   {
@@ -54,9 +55,13 @@ const accountCards = [
 export default function AccountPage() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
+  const currentIdentityId = useSegmentStore((s) => s.userId);
 
   useEffect(() => {
     if (!session?.user) return;
+    // Skip if we've already identified this user (e.g. persona seeded richer
+    // traits that we don't want to overwrite with the bronze defaults below).
+    if (currentIdentityId === session.user.id) return;
     identifyUser(session.user.id, {
       email: session.user.email ?? "",
       name: session.user.name ?? "",
@@ -67,7 +72,7 @@ export default function AccountPage() {
       lifetime_spend: 0,
       has_saved_address: false,
     });
-  }, [session?.user]);
+  }, [session?.user, currentIdentityId]);
 
   async function handleSignOut() {
     await authClient.signOut();
