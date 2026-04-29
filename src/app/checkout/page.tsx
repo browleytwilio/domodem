@@ -36,6 +36,11 @@ import {
   trackOrderCompleted,
   trackCouponApplied,
   trackCouponDenied,
+  trackCouponEntered,
+  trackCouponRemoved,
+  trackCheckoutStepViewed,
+  trackCheckoutStepCompleted,
+  trackPaymentInfoEntered,
   trackFormAbandoned,
 } from "@/lib/analytics/events";
 import type { Order } from "@/types/order";
@@ -90,8 +95,16 @@ export default function CheckoutPage() {
           quantity: i.quantity,
         })),
         subtotal,
-        appliedCoupon ?? undefined,
+        {
+          coupon: appliedCoupon ?? undefined,
+          currency: "AUD",
+          value: total,
+          shipping: deliveryFee,
+          tax: 0,
+          discount: couponDiscount,
+        },
       );
+      trackCheckoutStepViewed(1, "contact_and_delivery");
     }
     // Only fire once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,6 +135,8 @@ export default function CheckoutPage() {
     const code = couponInput.trim().toUpperCase();
     if (!code) return;
 
+    trackCouponEntered(code);
+
     try {
       const res = await fetch("/api/coupons/validate", {
         method: "POST",
@@ -138,7 +153,7 @@ export default function CheckoutPage() {
         toast.success(`Coupon applied: ${data.type}`);
       } else {
         setCouponError(data.error || "Invalid coupon code. Please try again.");
-        trackCouponDenied(code, "invalid_code");
+        trackCouponDenied(code, data.error ?? "invalid_code");
       }
     } catch {
       setCouponError("Unable to validate coupon. Please try again.");
@@ -146,9 +161,12 @@ export default function CheckoutPage() {
   }, [couponInput, subtotal, deliveryFee, applyCoupon]);
 
   const handleRemoveCoupon = useCallback(() => {
+    if (appliedCoupon) {
+      trackCouponRemoved(appliedCoupon, couponDiscount);
+    }
     removeCoupon();
     toast("Coupon removed.");
-  }, [removeCoupon]);
+  }, [appliedCoupon, couponDiscount, removeCoupon]);
 
   // --------------------------------------------------------------------------
   // Place order
@@ -194,6 +212,12 @@ export default function CheckoutPage() {
 
       setCurrentOrder(order);
       addToHistory(order);
+
+      trackCheckoutStepCompleted(1, "contact_and_delivery", {
+        delivery_method: deliveryMethod,
+        has_delivery_address: Boolean(localAddress.trim()),
+      });
+      trackPaymentInfoEntered("pay_at_store");
 
       trackOrderCompleted({
         order_id: order.id,

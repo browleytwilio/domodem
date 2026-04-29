@@ -50,11 +50,13 @@ export function trackProductRemoved(
   productId: string,
   name: string,
   quantity: number,
+  extras?: { category?: string; price?: number; variant?: string },
 ): void {
   analytics.track("Product Removed", {
     product_id: productId,
     name,
     quantity,
+    ...extras,
   });
 }
 
@@ -74,13 +76,25 @@ export function trackCheckoutStarted(
   cartId: string,
   products: ProductProperties[],
   revenue: number,
-  coupon?: string,
+  options: {
+    coupon?: string;
+    currency?: string;
+    value?: number;
+    shipping?: number;
+    tax?: number;
+    discount?: number;
+  } = {},
 ): void {
   analytics.track("Checkout Started", {
-    cart_id: cartId,
+    order_id: cartId,
     products,
     revenue,
-    ...(coupon !== undefined && { coupon }),
+    currency: options.currency ?? "AUD",
+    ...(options.value !== undefined && { value: options.value }),
+    ...(options.shipping !== undefined && { shipping: options.shipping }),
+    ...(options.tax !== undefined && { tax: options.tax }),
+    ...(options.discount !== undefined && { discount: options.discount }),
+    ...(options.coupon !== undefined && { coupon: options.coupon }),
   });
 }
 
@@ -423,4 +437,88 @@ export function trackError(
   context: Record<string, unknown> = {},
 ): void {
   analytics.track("Error Encountered", { message, ...context });
+}
+
+// ---------------------------------------------------------------------------
+// Spec v2 — browsing + promotions + checkout steps (gap fill)
+// ---------------------------------------------------------------------------
+
+export function trackProductListFiltered(
+  category: string,
+  filter: string,
+  resultsCount: number,
+): void {
+  analytics.track("Product List Filtered", {
+    category,
+    filters: [{ type: "category", value: filter }],
+    results_count: resultsCount,
+  });
+}
+
+export function trackProductClicked(
+  product: ProductProperties,
+  position?: number,
+): void {
+  analytics.track("Product Clicked", {
+    ...product,
+    ...(position !== undefined && { position }),
+  });
+}
+
+export function trackPromotionViewed(
+  promotionId: string,
+  promotionName: string,
+  position?: number,
+): void {
+  analytics.track("Promotion Viewed", {
+    promotion_id: promotionId,
+    name: promotionName,
+    ...(position !== undefined && { position }),
+  });
+}
+
+export function trackPromotionClicked(
+  promotionId: string,
+  promotionName: string,
+  position?: number,
+): void {
+  analytics.track("Promotion Clicked", {
+    promotion_id: promotionId,
+    name: promotionName,
+    ...(position !== undefined && { position }),
+  });
+}
+
+export function trackCouponEntered(couponCode: string): void {
+  analytics.track("Coupon Entered", { coupon_code: couponCode });
+}
+
+export function trackCouponRemoved(couponCode: string, discount: number): void {
+  analytics.track("Coupon Removed", { coupon_code: couponCode, discount });
+}
+
+export function trackCheckoutStepViewed(
+  stepNumber: number,
+  stepName: string,
+): void {
+  analytics.track("Checkout Step Viewed", {
+    step: stepNumber,
+    step_name: stepName,
+  });
+}
+
+export function trackCheckoutStepCompleted(
+  stepNumber: number,
+  stepName: string,
+  properties: Record<string, unknown> = {},
+): void {
+  analytics.track("Checkout Step Completed", {
+    step: stepNumber,
+    step_name: stepName,
+    ...properties,
+  });
+}
+
+export function trackPaymentInfoEntered(paymentMethod: string): void {
+  analytics.track("Payment Info Entered", { payment_method: paymentMethod });
 }
