@@ -10,7 +10,11 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCartStore } from "@/stores/cart-store";
 import { useUIStore } from "@/stores/ui-store";
-import { trackCartViewed, trackProductRemoved } from "@/lib/analytics/events";
+import {
+  trackCartViewed,
+  trackProductRemoved,
+  toSegmentProduct,
+} from "@/lib/analytics/events";
 import type { CartItem } from "@/types/order";
 
 export function CartDrawer() {
@@ -27,14 +31,8 @@ export function CartDrawer() {
     if (open && items.length > 0) {
       trackCartViewed(
         "cart-drawer",
-        items.map((i) => ({
-          product_id: i.productSlug,
-          name: i.productName,
-          category: i.category,
-          price: i.unitPrice,
-          quantity: i.quantity,
-        })),
-        subtotal
+        items.map((item, idx) => toSegmentProduct(item, idx + 1)),
+        subtotal,
       );
     }
   }

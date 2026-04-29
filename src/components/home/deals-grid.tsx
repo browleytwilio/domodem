@@ -63,7 +63,7 @@ export function DealsGrid() {
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
-      className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5 lg:gap-6"
+      className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
     >
       {deals.map((deal, idx) => (
         <motion.div
@@ -81,7 +81,7 @@ export function DealsGrid() {
             <div className="absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-white/[0.04]" />
 
             {/* Floating product image */}
-            <div className="absolute -bottom-2 -right-2 h-28 w-28 overflow-hidden rounded-full opacity-40 transition-all duration-300 group-hover:opacity-60 group-hover:scale-110 sm:h-32 sm:w-32">
+            <div className="absolute -bottom-2 -right-2 h-24 w-24 overflow-hidden rounded-full opacity-40 transition-all duration-300 group-hover:opacity-60 group-hover:scale-110 sm:h-28 sm:w-28 lg:h-32 lg:w-32">
               <ProductImage
                 src={deal.image}
                 alt={deal.name}
@@ -106,7 +106,7 @@ export function DealsGrid() {
 
             {/* Content */}
             <div className="relative z-10">
-              <h3 className="text-lg font-bold leading-snug text-white sm:text-xl">
+              <h3 className="line-clamp-2 text-lg font-bold leading-snug text-white sm:text-xl">
                 {deal.name}
               </h3>
               <p className="mt-2 line-clamp-3 max-w-[70%] text-sm leading-relaxed text-white/80">
@@ -136,9 +136,13 @@ export function DealsGrid() {
                 <Link
                   href={`/deals?code=${deal.code}`}
                   onClick={() =>
-                    trackPromotionClicked(deal.id, deal.name, idx + 1)
+                    trackPromotionClicked(deal.id, deal.name, idx + 1, {
+                      discount_value: deal.originalPrice - deal.price,
+                      creative: deal.badge ?? `gradient-${idx % 6}`,
+                      destination_url: `/deals?code=${deal.code}`,
+                    })
                   }
-                  className="inline-flex items-center rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-[var(--dominos-red)] shadow transition-all hover:scale-105 hover:shadow-lg active:scale-[0.98]"
+                  className="inline-flex items-center rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-[var(--dominos-red)] shadow transition-all hover:scale-105 hover:shadow-lg active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20"
                 >
                   Order Deal
                 </Link>

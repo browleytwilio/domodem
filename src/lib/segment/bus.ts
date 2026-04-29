@@ -2,6 +2,38 @@
 import { AnalyticsBrowser } from "@segment/analytics-next";
 import type { LoggedEvent } from "./types";
 import { useSegmentStore } from "@/stores/segment-store";
+import { useCartStore } from "@/stores/cart-store";
+import { useUIStore } from "@/stores/ui-store";
+
+const ECOMMERCE_EVENT_PATTERNS = [
+  /^Product /, /^Products /, /^Cart /, /^Checkout /, /^Order /, /^Coupon /,
+  /^Promotion /, /^Deal /, /^Payment /, /^Store /,
+];
+
+function isEcommerceEvent(name: string): boolean {
+  return ECOMMERCE_EVENT_PATTERNS.some((rx) => rx.test(name));
+}
+
+function buildContextProperties(eventName: string): Record<string, unknown> {
+  const ctx: Record<string, unknown> = {};
+  if (typeof window !== "undefined") {
+    ctx.source_page = window.location.pathname;
+  }
+  if (isEcommerceEvent(eventName)) {
+    const cart = useCartStore.getState();
+    const ui = useUIStore.getState();
+    ctx.cart_item_count = cart.items.reduce((s, i) => s + i.quantity, 0);
+    ctx.cart_value = cart.items.reduce(
+      (s, i) => s + i.unitPrice * i.quantity,
+      0,
+    );
+    ctx.delivery_method = ui.deliveryMethod;
+    if (ui.selectedStore) {
+      ctx.selected_store_id = ui.selectedStore.id;
+    }
+  }
+  return ctx;
+}
 
 const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || "";
 const analyticsEnabled = writeKey.length > 0;
@@ -87,18 +119,22 @@ function record(event: LoggedEvent) {
 export const analytics = {
   async track(name: string, properties?: object): Promise<void> {
     const { userId, anonymousId } = await getIdentity();
+    const merged: Record<string, unknown> = {
+      ...buildContextProperties(name),
+      ...((properties as Record<string, unknown> | undefined) ?? {}),
+    };
     const event: LoggedEvent = {
       id: newId(),
       kind: "track",
       name,
       userId,
       anonymousId,
-      properties: properties as Record<string, unknown> | undefined,
+      properties: merged,
       timestamp: new Date().toISOString(),
       receivedAt: Date.now(),
     };
     record(event);
-    await safeAwait(realAnalytics.track(name, properties));
+    await safeAwait(realAnalytics.track(name, merged));
   },
 
   async identify(userId: string, traits?: object): Promise<void> {
@@ -125,18 +161,23 @@ export const analytics = {
     properties?: object,
   ): Promise<void> {
     const { userId, anonymousId } = await getIdentity();
+    const merged: Record<string, unknown> = {
+      ...buildContextProperties("Page Viewed"),
+      ...(category !== undefined && { category }),
+      ...((properties as Record<string, unknown> | undefined) ?? {}),
+    };
     const event: LoggedEvent = {
       id: newId(),
       kind: "page",
       name: name ?? "Page Viewed",
       userId,
       anonymousId,
-      properties: { category, ...(properties as Record<string, unknown> | undefined) },
+      properties: merged,
       timestamp: new Date().toISOString(),
       receivedAt: Date.now(),
     };
     record(event);
-    await safeAwait(realAnalytics.page(category, name, properties));
+    await safeAwait(realAnalytics.page(category, name, merged));
   },
 
   async group(groupId: string, traits?: object): Promise<void> {

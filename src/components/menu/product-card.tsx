@@ -18,6 +18,8 @@ import {
   trackProductViewed,
   trackProductClicked,
   trackProductAdded,
+  toSegmentProduct,
+  BRAND,
 } from "@/lib/analytics/events";
 import type { Product } from "@/types/menu";
 
@@ -53,6 +55,8 @@ export function ProductCard({ product }: ProductCardProps) {
             price: lowestPrice,
             quantity: 1,
             image_url: product.image,
+            brand: BRAND,
+            url: `/product/${product.slug}`,
           });
           observer.disconnect();
         }
@@ -77,6 +81,8 @@ export function ProductCard({ product }: ProductCardProps) {
       price: lowestPrice,
       quantity: 1,
       image_url: product.image,
+      brand: BRAND,
+      url: `/product/${product.slug}`,
     });
   }
 
@@ -92,14 +98,7 @@ export function ProductCard({ product }: ProductCardProps) {
       unitPrice,
     };
     addItem(item);
-    trackProductAdded({
-      product_id: product.slug,
-      name: product.name,
-      category: product.category,
-      price: unitPrice,
-      quantity: 1,
-      image_url: product.image,
-    });
+    trackProductAdded(toSegmentProduct(item));
   }
 
   return (

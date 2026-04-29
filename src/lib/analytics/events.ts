@@ -4,6 +4,31 @@ import type {
   OrderProperties,
   UserTraits,
 } from "@/types/analytics";
+import type { CartItem } from "@/types/order";
+
+export const BRAND = "Domino's";
+
+export function toSegmentProduct(
+  item: CartItem,
+  position?: number,
+): ProductProperties {
+  const variantParts = [item.size, item.crust].filter(Boolean) as string[];
+  return {
+    product_id: item.productSlug,
+    sku: [item.productSlug, item.size ?? "single", item.crust]
+      .filter(Boolean)
+      .join("-"),
+    name: item.productName,
+    category: item.category,
+    brand: BRAND,
+    price: item.unitPrice,
+    quantity: item.quantity,
+    ...(item.image && { image_url: item.image }),
+    url: `/product/${item.productSlug}`,
+    ...(variantParts.length > 0 && { variant: variantParts.join(" / ") }),
+    ...(position !== undefined && { position }),
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Identity
@@ -218,19 +243,31 @@ export function trackPizzaBuilderAbandoned(
 export function trackStoreSearchInitiated(
   query: string,
   method: string,
+  extras?: {
+    results_count?: number;
+    latitude?: number;
+    longitude?: number;
+  },
 ): void {
-  analytics.track("Store Search Initiated", { query, method });
+  analytics.track("Store Search Initiated", { query, method, ...extras });
 }
 
 export function trackStoreSelected(
   storeId: string,
   storeName: string,
   distanceKm: number,
+  extras?: {
+    suburb?: string;
+    postcode?: string;
+    state?: string;
+    delivery_method?: string;
+  },
 ): void {
   analytics.track("Store Selected", {
     store_id: storeId,
     store_name: storeName,
     distance_km: distanceKm,
+    ...extras,
   });
 }
 
@@ -271,12 +308,19 @@ export function trackOrderStatusChanged(
   previousStatus: string,
   newStatus: string,
   elapsedMinutes: number,
+  extras?: {
+    delivery_method?: string;
+    store_id?: string;
+    total?: number;
+    estimated_delivery?: string;
+  },
 ): void {
   analytics.track("Order Status Changed", {
     order_id: orderId,
     previous_status: previousStatus,
     new_status: newStatus,
     elapsed_minutes: elapsedMinutes,
+    ...extras,
   });
 }
 
@@ -374,11 +418,13 @@ export function trackHeroBannerClicked(
   bannerId: string,
   bannerName: string,
   position: number,
+  destinationUrl?: string,
 ): void {
   analytics.track("Hero Banner Clicked", {
     banner_id: bannerId,
     banner_name: bannerName,
     position,
+    ...(destinationUrl !== undefined && { destination_url: destinationUrl }),
   });
 }
 
@@ -469,11 +515,17 @@ export function trackPromotionViewed(
   promotionId: string,
   promotionName: string,
   position?: number,
+  extras?: {
+    discount_value?: number;
+    creative?: string;
+    destination_url?: string;
+  },
 ): void {
   analytics.track("Promotion Viewed", {
     promotion_id: promotionId,
     name: promotionName,
     ...(position !== undefined && { position }),
+    ...extras,
   });
 }
 
@@ -481,11 +533,17 @@ export function trackPromotionClicked(
   promotionId: string,
   promotionName: string,
   position?: number,
+  extras?: {
+    discount_value?: number;
+    creative?: string;
+    destination_url?: string;
+  },
 ): void {
   analytics.track("Promotion Clicked", {
     promotion_id: promotionId,
     name: promotionName,
     ...(position !== undefined && { position }),
+    ...extras,
   });
 }
 

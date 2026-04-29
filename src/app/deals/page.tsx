@@ -83,7 +83,7 @@ function DealCard({ deal, index }: { deal: Deal; index: number }) {
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
       {/* Image */}
-      <div className="relative h-48 overflow-hidden sm:h-56">
+      <div className="relative h-40 overflow-hidden sm:h-48 md:h-52 lg:h-56">
         <ProductImage
           src={deal.image}
           alt={deal.name}
@@ -114,9 +114,9 @@ function DealCard({ deal, index }: { deal: Deal; index: number }) {
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="mb-1 text-lg font-bold leading-tight">{deal.name}</h3>
-        <p className="mb-4 flex-1 text-sm leading-relaxed text-muted-foreground">
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <h3 className="mb-1 line-clamp-2 text-base font-bold leading-tight sm:text-lg">{deal.name}</h3>
+        <p className="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">
           {deal.description}
         </p>
 
@@ -158,7 +158,15 @@ function DealCard({ deal, index }: { deal: Deal; index: number }) {
         >
           <Link
             href={firstProduct ? `/menu?deal=${deal.code}` : "/menu"}
-            onClick={() => trackPromotionClicked(deal.id, deal.name, position)}
+            onClick={() =>
+              trackPromotionClicked(deal.id, deal.name, position, {
+                discount_value: deal.originalPrice - deal.price,
+                creative: deal.badge ?? undefined,
+                destination_url: firstProduct
+                  ? `/menu?deal=${deal.code}`
+                  : "/menu",
+              })
+            }
           >
             Order Now
             <ArrowRight className="ml-1 h-4 w-4" />
@@ -184,7 +192,10 @@ export default function DealsPage() {
     deals.forEach((deal, idx) => {
       const discountValue = deal.originalPrice - deal.price;
       trackDealViewed(deal.id, deal.name, discountValue);
-      trackPromotionViewed(deal.id, deal.name, idx + 1);
+      trackPromotionViewed(deal.id, deal.name, idx + 1, {
+        discount_value: discountValue,
+        creative: deal.badge ?? undefined,
+      });
     });
   }, []);
 
@@ -207,7 +218,7 @@ export default function DealsPage() {
         </div>
 
         {/* Deals grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
           {deals.map((deal, index) => (
             <DealCard key={deal.id} deal={deal} index={index} />
           ))}

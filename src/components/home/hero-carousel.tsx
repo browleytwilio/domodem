@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { getHeroPlaceholder } from "@/lib/image-placeholder";
 import { trackHeroBannerClicked } from "@/lib/analytics/events";
 
 interface Slide {
@@ -126,7 +125,7 @@ export function HeroCarousel() {
       aria-roledescription="carousel"
       aria-label="Featured deals"
     >
-      <div className="relative h-[280px] sm:h-[340px] md:h-[420px] lg:h-[480px]">
+      <div className="relative h-[240px] touch-pan-y sm:h-[320px] md:h-[420px] lg:h-[480px]">
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
             key={slide.id}
@@ -135,20 +134,28 @@ export function HeroCarousel() {
             initial="enter"
             animate="center"
             exit="exit"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={(_, info) => {
+              const threshold = 80;
+              if (info.offset.x < -threshold) paginate(1);
+              else if (info.offset.x > threshold) paginate(-1);
+            }}
             transition={{
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.3 },
             }}
-            className={`absolute inset-0 flex items-center bg-gradient-to-br ${slide.bgFrom} ${slide.bgTo}`}
+            className={`absolute inset-0 flex cursor-grab items-center bg-gradient-to-br active:cursor-grabbing ${slide.bgFrom} ${slide.bgTo}`}
             aria-roledescription="slide"
             aria-label={`Slide ${current + 1} of ${slides.length}: ${slide.headline}`}
           >
             {/* Background food imagery */}
             <div
-              className="absolute inset-0 bg-cover bg-center opacity-20"
-              style={{ backgroundImage: `url(${getHeroPlaceholder(current).src})` }}
+              className="absolute inset-0 bg-cover bg-center opacity-40"
+              style={{ backgroundImage: `url(/images/hero/hero-${current}.webp)` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10" />
 
             {/* Decorative background shapes */}
             <div className="absolute inset-0 overflow-hidden">
@@ -157,15 +164,15 @@ export function HeroCarousel() {
               <div className="absolute right-1/4 top-1/3 h-40 w-40 rotate-45 rounded-3xl bg-white/[0.03]" />
             </div>
 
-            <div className="relative mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-              <div className="flex max-w-2xl flex-col gap-4 sm:gap-5 md:gap-6">
+            <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
+              <div className="flex max-w-md flex-col gap-3 sm:max-w-lg sm:gap-5 md:max-w-xl md:gap-6 lg:max-w-2xl">
                 {/* Price pill */}
                 <motion.div
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15, duration: 0.4 }}
                 >
-                  <span className="inline-block rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold text-white backdrop-blur-sm sm:text-base">
+                  <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm sm:px-4 sm:py-1.5 sm:text-base">
                     {slide.price === "FREE" ? "FREE" : `From ${slide.price}`}
                   </span>
                 </motion.div>
@@ -175,7 +182,7 @@ export function HeroCarousel() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25, duration: 0.4 }}
-                  className="text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
+                  className="text-[1.6rem] font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
                 >
                   {slide.headline}
                 </motion.h2>
@@ -185,7 +192,7 @@ export function HeroCarousel() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.35, duration: 0.4 }}
-                  className="max-w-lg text-base leading-relaxed text-white/85 sm:text-lg"
+                  className="line-clamp-2 max-w-lg text-sm leading-relaxed text-white/85 sm:line-clamp-none sm:text-base md:text-lg"
                 >
                   {slide.subtext}
                 </motion.p>
@@ -203,9 +210,10 @@ export function HeroCarousel() {
                         `slide-${slide.id}`,
                         slide.headline,
                         current + 1,
+                        slide.href,
                       )
                     }
-                    className="inline-flex items-center rounded-lg bg-white px-6 py-3 text-sm font-bold text-[var(--dominos-red)] shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-[0.98] sm:px-8 sm:py-3.5 sm:text-base"
+                    className="inline-flex items-center rounded-lg bg-white px-5 py-2.5 text-sm font-bold text-[var(--dominos-red)] shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/20 sm:px-8 sm:py-3.5 sm:text-base"
                   >
                     {slide.cta}
                   </Link>
@@ -217,14 +225,14 @@ export function HeroCarousel() {
       </div>
 
       {/* Navigation dots */}
-      <div className="absolute bottom-4 left-0 right-0 flex items-center justify-center gap-2 sm:bottom-6">
+      <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-2 sm:bottom-6">
         {slides.map((s, idx) => (
           <button
             key={s.id}
             onClick={() => goToSlide(idx)}
             aria-label={`Go to slide ${idx + 1}`}
             aria-current={idx === current ? "true" : undefined}
-            className={`h-2.5 rounded-full transition-all duration-300 ${
+            className={`h-2.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30 active:scale-90 ${
               idx === current
                 ? "w-8 bg-white"
                 : "w-2.5 bg-white/40 hover:bg-white/60"
@@ -233,11 +241,11 @@ export function HeroCarousel() {
         ))}
       </div>
 
-      {/* Left/Right arrows (desktop) */}
+      {/* Left/Right arrows */}
       <button
         onClick={() => paginate(-1)}
         aria-label="Previous slide"
-        className="absolute left-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-black/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-black/40 sm:left-4 md:flex"
+        className="absolute left-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-black/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 active:scale-90 sm:left-4 sm:flex"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -255,7 +263,7 @@ export function HeroCarousel() {
       <button
         onClick={() => paginate(1)}
         aria-label="Next slide"
-        className="absolute right-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-black/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-black/40 sm:right-4 md:flex"
+        className="absolute right-2 top-1/2 hidden -translate-y-1/2 items-center justify-center rounded-full bg-black/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 active:scale-90 sm:right-4 sm:flex"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -42,6 +42,7 @@ import {
   trackCheckoutStepCompleted,
   trackPaymentInfoEntered,
   trackFormAbandoned,
+  toSegmentProduct,
 } from "@/lib/analytics/events";
 import type { Order } from "@/types/order";
 
@@ -87,13 +88,7 @@ export default function CheckoutPage() {
     if (items.length > 0) {
       trackCheckoutStarted(
         "checkout",
-        items.map((i) => ({
-          product_id: i.productSlug,
-          name: i.productName,
-          category: i.category,
-          price: i.unitPrice,
-          quantity: i.quantity,
-        })),
+        items.map((i, idx) => toSegmentProduct(i, idx + 1)),
         subtotal,
         {
           coupon: appliedCoupon ?? undefined,
@@ -228,16 +223,16 @@ export default function CheckoutPage() {
         currency: "AUD",
         coupon: appliedCoupon ?? undefined,
         discount: couponDiscount > 0 ? couponDiscount : undefined,
-        products: items.map((i) => ({
-          product_id: i.productSlug,
-          name: i.productName,
-          category: i.category,
-          price: i.unitPrice,
-          quantity: i.quantity,
-        })),
+        products: items.map((i, idx) => toSegmentProduct(i, idx + 1)),
         payment_method: "pay_at_store",
         delivery_method: deliveryMethod,
         store_id: order.storeId,
+        ...(deliveryMethod === "delivery" && localAddress.trim() && {
+          delivery_address: localAddress.trim(),
+        }),
+        ...(order.estimatedDelivery && {
+          estimated_delivery: order.estimatedDelivery,
+        }),
       });
 
       clearCart();
