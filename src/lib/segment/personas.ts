@@ -1,10 +1,13 @@
 // src/lib/segment/personas.ts
 import { analytics } from "@/lib/segment/bus";
 
+export type PersonaIcon = "crown" | "cart" | "tag" | "user";
+
 export interface Persona {
   id: string;
   name: string;
   description: string;
+  icon: PersonaIcon;
   userId: string;
   email: string;
   traits: Record<string, unknown>;
@@ -20,6 +23,7 @@ export const PERSONAS: Persona[] = [
     id: "sarah_vip",
     name: "Sarah — VIP Customer",
     description: "5 past orders, loyalty Gold, pizzas lover, Sydney",
+    icon: "crown",
     userId: "user-sarah-vip",
     email: "sarah.vip@dominosdemo.com",
     traits: {
@@ -60,6 +64,7 @@ export const PERSONAS: Persona[] = [
     id: "dan_abandoner",
     name: "Dan — Cart Abandoner",
     description: "Browses, adds to cart, leaves",
+    icon: "cart",
     userId: "user-dan-abandoner",
     email: "dan.abandoner@dominosdemo.com",
     traits: {
@@ -107,6 +112,7 @@ export const PERSONAS: Persona[] = [
     id: "mia_dealhunter",
     name: "Mia — Deal Hunter",
     description: "Loves coupons & deals, lunch lover",
+    icon: "tag",
     userId: "user-mia-deals",
     email: "mia.deals@dominosdemo.com",
     traits: {
@@ -130,6 +136,7 @@ export const PERSONAS: Persona[] = [
     id: "anon_visitor",
     name: "Anon — New Visitor",
     description: "Anonymous session, just browsing",
+    icon: "user",
     userId: "",
     email: "",
     traits: {},
