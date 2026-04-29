@@ -8,7 +8,10 @@ import { Separator } from "@/components/ui/separator";
 import { useSegmentStore } from "@/stores/segment-store";
 
 export function IdentityPanel() {
-  const { userId, anonymousId, traits, events } = useSegmentStore();
+  const userId = useSegmentStore((s) => s.userId);
+  const anonymousId = useSegmentStore((s) => s.anonymousId);
+  const traits = useSegmentStore((s) => s.traits);
+  const events = useSegmentStore((s) => s.events);
   const [copied, setCopied] = useState<string | null>(null);
 
   const identifyEvents = events.filter((e) => e.kind === "identify");
