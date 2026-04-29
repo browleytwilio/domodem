@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCartStore } from "@/stores/cart-store";
 import { useSegmentStore } from "@/stores/segment-store";
 import { analytics } from "@/lib/segment/bus";
@@ -22,6 +22,11 @@ export function SegmentProvider({ children }: { children: React.ReactNode }) {
   const setComputedTraits = useSegmentStore((s) => s.setComputedTraits);
   const advanceJourney = useSegmentStore((s) => s.advanceJourney);
   const prevAudiencesRef = useRef(audiences);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const cartItems = useCartStore((s) => s.items);
   const cartItemCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
@@ -82,7 +87,7 @@ export function SegmentProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      {demoMode && (
+      {mounted && demoMode && (
         <>
           <DemoToolbar />
           <DemoFab />
