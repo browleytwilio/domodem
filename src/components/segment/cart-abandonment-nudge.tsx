@@ -7,14 +7,14 @@ import { useSegmentStore } from "@/stores/segment-store";
 const IDLE_MS = 45_000;
 
 export function CartAbandonmentNudge() {
-  const audiences = useSegmentStore((s) => s.audiences);
+  const isAbandoner = useSegmentStore((s) =>
+    s.audiences.some((a) => a.id === "cart_abandoners"),
+  );
   const demoMode = useSegmentStore((s) => s.demoModeEnabled);
   const firedRef = useRef(false);
 
   useEffect(() => {
-    if (!demoMode) return;
-    const isAbandoner = audiences.some((a) => a.id === "cart_abandoners");
-    if (!isAbandoner || firedRef.current) return;
+    if (!demoMode || !isAbandoner || firedRef.current) return;
 
     const timer = setTimeout(() => {
       firedRef.current = true;
@@ -33,7 +33,7 @@ export function CartAbandonmentNudge() {
     }, IDLE_MS);
 
     return () => clearTimeout(timer);
-  }, [audiences, demoMode]);
+  }, [isAbandoner, demoMode]);
 
   return null;
 }
