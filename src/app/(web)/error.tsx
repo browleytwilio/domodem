@@ -23,7 +23,7 @@ export default function ErrorBoundary({
   }, [error]);
 
   return (
-    <main role="alert" className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-24">
+    <div role="alert" className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-24">
       <div className="relative h-48 w-64 overflow-hidden rounded-2xl bg-muted shadow-lg">
         <Image
           src="/images/error.webp"
@@ -51,6 +51,6 @@ export default function ErrorBoundary({
           </Link>
         </Button>
       </div>
-    </main>
+    </div>
   );
 }
