@@ -4,6 +4,7 @@ import type { LoggedEvent } from "./types";
 import { useSegmentStore } from "@/stores/segment-store";
 import { useCartStore } from "@/stores/cart-store";
 import { useUIStore } from "@/stores/ui-store";
+import { resolveSourceFromPath, appNameForSource } from "./source";
 
 const ECOMMERCE_EVENT_PATTERNS = [
   /^Product /, /^Products /, /^Cart /, /^Checkout /, /^Order /, /^Coupon /,
@@ -18,6 +19,9 @@ function buildContextProperties(eventName: string): Record<string, unknown> {
   const ctx: Record<string, unknown> = {};
   if (typeof window !== "undefined") {
     ctx.source_page = window.location.pathname;
+    const source = resolveSourceFromPath(window.location.pathname);
+    ctx.source = source;
+    ctx.app_name = appNameForSource(source);
   }
   if (isEcommerceEvent(eventName)) {
     const cart = useCartStore.getState();

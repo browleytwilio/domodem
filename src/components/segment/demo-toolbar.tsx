@@ -27,6 +27,8 @@ import {
 import { PERSONAS, type PersonaIcon } from "@/lib/segment/personas";
 import { useSegmentStore } from "@/stores/segment-store";
 import { cn } from "@/lib/utils";
+import { ModeSwitcher } from "./mode-switcher";
+import { FrameToggle } from "./frame-toggle";
 
 const ICONS: Record<PersonaIcon, LucideIcon> = {
   crown: Crown,
@@ -128,6 +130,10 @@ export function DemoToolbar() {
         </PopoverTrigger>
 
         <PopoverContent side="top" align="end" sideOffset={8} className="w-80 p-0">
+          <ModeSwitcher />
+          <Separator />
+          <FrameToggle />
+
           {/* Overlays */}
           <section className="flex flex-col gap-3 p-4">
             <h3 className={SECTION_HEADER}>Overlays</h3>

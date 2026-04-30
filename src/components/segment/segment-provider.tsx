@@ -6,6 +6,7 @@ import { useSegmentStore } from "@/stores/segment-store";
 import { analytics } from "@/lib/segment/bus";
 import { computeTraits, evaluateAudiences } from "@/lib/segment/audiences";
 import { classifyStage } from "@/lib/segment/journey";
+import { setupCartBroadcast } from "@/lib/segment/cart-broadcast";
 import { DemoFab } from "./demo-fab";
 import { DemoToolbar } from "./demo-toolbar";
 import { EventInspector } from "./event-inspector";
@@ -26,6 +27,10 @@ export function SegmentProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    return setupCartBroadcast();
   }, []);
 
   const cartItems = useCartStore((s) => s.items);
