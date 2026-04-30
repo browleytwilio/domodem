@@ -67,6 +67,8 @@ export function AudienceToastNudge() {
       const timer = setTimeout(() => {
         firedRef.current.add(def.audienceId);
         toast(def.title, {
+          id: `tour-audience-toast-${def.audienceId}`,
+          className: "tour-audience-toast",
           description: def.description,
           action: {
             label: def.ctaLabel,
