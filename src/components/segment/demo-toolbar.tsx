@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/popover";
 import { PERSONAS, type PersonaIcon } from "@/lib/segment/personas";
 import { useSegmentStore } from "@/stores/segment-store";
+import { useTourStore } from "@/stores/tour-store";
 import { cn } from "@/lib/utils";
 import { ModeSwitcher } from "./mode-switcher";
 import { FrameToggle } from "./frame-toggle";
@@ -53,6 +54,8 @@ export function DemoToolbar() {
   const demoMode = useSegmentStore((s) => s.demoModeEnabled);
   const setDemoMode = useSegmentStore((s) => s.setDemoMode);
   const clear = useSegmentStore((s) => s.clear);
+  const resetTour = useTourStore((s) => s.reset);
+  const activeTour = useTourStore((s) => s.active);
   const [running, setRunning] = useState<string | null>(null);
   const [resetArmed, setResetArmed] = useState(false);
   const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,7 +81,7 @@ export function DemoToolbar() {
     }
   }
 
-  function handleResetClick() {
+  async function handleResetClick() {
     if (!resetArmed) {
       setResetArmed(true);
       if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
@@ -94,6 +97,16 @@ export function DemoToolbar() {
     }
     setResetArmed(false);
     clear();
+    if (activeTour) {
+      const { trackTourExited } = await import("@/lib/analytics/events");
+      const { useTourStore: store } = await import("@/stores/tour-store");
+      trackTourExited({
+        adventure_id: activeTour,
+        beat_index: store.getState().beatIndex,
+        reason: "reset",
+      });
+    }
+    resetTour();
     toast.success("Demo state reset");
   }
 
