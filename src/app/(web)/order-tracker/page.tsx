@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Clock, Search, ArrowRight, Pizza } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,27 +33,20 @@ export default function OrderTrackerLandingPage() {
   // Show nothing briefly while redirecting
   if (redirecting) {
     return (
-      <>
-        <Header />
-        <main className="flex flex-1 items-center justify-center py-24">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--dominos-blue)] border-t-transparent" />
-            <p className="text-sm text-muted-foreground">
-              Redirecting to your order...
-            </p>
-          </div>
-        </main>
-        <Footer />
-      </>
+      <div className="flex flex-1 items-center justify-center py-24">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--dominos-blue)] border-t-transparent" />
+          <p className="text-sm text-muted-foreground">
+            Redirecting to your order...
+          </p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <>
-      <Header />
-
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-4 py-16">
-        <div className="w-full text-center">
+    <div className="mx-auto flex w-full max-w-2xl flex-col items-center justify-center px-4 py-16">
+      <div className="w-full text-center">
           {/* Icon */}
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--dominos-blue)]/10">
             <Clock className="h-10 w-10 text-[var(--dominos-blue)]" />
@@ -118,9 +109,6 @@ export default function OrderTrackerLandingPage() {
             </Button>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </div>
   );
 }

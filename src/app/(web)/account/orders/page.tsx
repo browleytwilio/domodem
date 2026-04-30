@@ -3,9 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Package, RotateCcw, MapPin, AlertCircle, RefreshCw } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -84,11 +81,8 @@ export default function OrdersPage() {
   }, [fetchOrders]);
 
   return (
-    <>
-      <Header />
-      <CartDrawer />
-      <main className="flex-1 bg-[var(--dominos-light-gray)]">
-        <AuthGuard>
+    <div className="bg-[var(--dominos-light-gray)]">
+      <AuthGuard>
           <div className="mx-auto max-w-3xl px-4 py-10">
             <div className="mb-6 flex items-center justify-between">
               <div>
@@ -221,8 +215,6 @@ export default function OrdersPage() {
             )}
           </div>
         </AuthGuard>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }

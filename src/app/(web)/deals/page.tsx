@@ -4,9 +4,6 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Tag, ArrowRight, Percent, Flame, Copy } from "lucide-react";
 import { toast } from "sonner";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { ProductImage } from "@/components/ui/product-image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -200,12 +197,8 @@ export default function DealsPage() {
   }, []);
 
   return (
-    <>
-      <Header />
-      <CartDrawer />
-
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">
-        {/* Page header */}
+    <div className="mx-auto w-full max-w-7xl px-4 py-8">
+      {/* Page header */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--dominos-red)]/10">
             <Flame className="h-7 w-7 text-[var(--dominos-red)]" />
@@ -243,9 +236,6 @@ export default function DealsPage() {
             </Link>
           </Button>
         </div>
-      </main>
-
-      <Footer />
-    </>
+    </div>
   );
 }

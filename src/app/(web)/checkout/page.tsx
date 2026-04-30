@@ -18,9 +18,6 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { RemoveItemButton } from "@/components/cart/remove-item-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -276,29 +273,24 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <>
-        <Header />
-        <CartDrawer />
-        <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-24">
-          <ShoppingBag className="h-20 w-20 text-muted-foreground/30" />
-          <h1 className="text-2xl font-bold">Your cart is empty</h1>
-          <p className="max-w-md text-center text-muted-foreground">
-            Looks like you haven&apos;t added any items yet. Head over to the
-            menu and build your perfect order.
-          </p>
-          <Button
-            className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
-            size="lg"
-            asChild
-          >
-            <Link href="/menu">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Browse Menu
-            </Link>
-          </Button>
-        </main>
-        <Footer />
-      </>
+      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-24">
+        <ShoppingBag className="h-20 w-20 text-muted-foreground/30" />
+        <h1 className="text-2xl font-bold">Your cart is empty</h1>
+        <p className="max-w-md text-center text-muted-foreground">
+          Looks like you haven&apos;t added any items yet. Head over to the
+          menu and build your perfect order.
+        </p>
+        <Button
+          className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
+          size="lg"
+          asChild
+        >
+          <Link href="/menu">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Browse Menu
+          </Link>
+        </Button>
+      </div>
     );
   }
 
@@ -308,10 +300,7 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <Header />
-      <CartDrawer />
-
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">
+      <div className="mx-auto w-full max-w-7xl px-4 py-8">
         {/* Back link */}
         <Link
           href="/menu"
@@ -702,9 +691,7 @@ export default function CheckoutPage() {
             </Button>
           </div>
         </div>
-      </main>
-
-      <Footer />
+      </div>
     </>
   );
 }

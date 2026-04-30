@@ -3,9 +3,6 @@
 import { Suspense, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { StoreSearch } from "@/components/store/store-search";
 import { DeliveryPickupToggle } from "@/components/store/delivery-pickup-toggle";
 import { StoreCard } from "@/components/store/store-card";
@@ -215,12 +212,8 @@ function StoreLocatorInner() {
   // Render
   // -----------------------------------------------------------------------
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <CartDrawer />
-
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8">
-        {/* Page heading */}
+    <div className="mx-auto w-full max-w-7xl px-4 py-8">
+      {/* Page heading */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-[var(--dominos-dark-blue)]">
             Find a Store
@@ -285,9 +278,6 @@ function StoreLocatorInner() {
             )}
           </div>
         </div>
-      </main>
-
-      <Footer />
     </div>
   );
 }

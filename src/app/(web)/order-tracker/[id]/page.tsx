@@ -3,8 +3,6 @@
 import { useEffect, useState, useRef, use } from "react";
 import Link from "next/link";
 import { ArrowLeft, Clock, Timer, WifiOff, AlertTriangle } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { TrackerProgress } from "@/components/order-tracker/tracker-progress";
 import { TrackerDetails } from "@/components/order-tracker/tracker-details";
 import { Button } from "@/components/ui/button";
@@ -204,30 +202,26 @@ export default function OrderTrackerPage({
 
   if (!order) {
     return (
-      <>
-        <Header />
-        <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-24">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-            <Clock className="h-10 w-10 text-muted-foreground/50" />
-          </div>
-          <h1 className="text-2xl font-bold">Order Not Found</h1>
-          <p className="max-w-md text-center text-muted-foreground">
-            We couldn&apos;t find an order with that ID. It may have expired or
-            the link might be incorrect.
-          </p>
-          <Button
-            className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
-            size="lg"
-            asChild
-          >
-            <Link href="/menu">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Menu
-            </Link>
-          </Button>
-        </main>
-        <Footer />
-      </>
+      <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-24">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+          <Clock className="h-10 w-10 text-muted-foreground/50" />
+        </div>
+        <h1 className="text-2xl font-bold">Order Not Found</h1>
+        <p className="max-w-md text-center text-muted-foreground">
+          We couldn&apos;t find an order with that ID. It may have expired or
+          the link might be incorrect.
+        </p>
+        <Button
+          className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
+          size="lg"
+          asChild
+        >
+          <Link href="/menu">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Menu
+          </Link>
+        </Button>
+      </div>
     );
   }
 
@@ -239,11 +233,8 @@ export default function OrderTrackerPage({
   const isComplete = order.status === sequence[sequence.length - 1];
 
   return (
-    <>
-      <Header />
-
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
-        {/* Back link */}
+    <div className="mx-auto w-full max-w-4xl px-4 py-8">
+      {/* Back link */}
         <Link
           href="/menu"
           className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -322,9 +313,6 @@ export default function OrderTrackerPage({
 
         {/* Order details */}
         <TrackerDetails order={order} />
-      </main>
-
-      <Footer />
-    </>
+    </div>
   );
 }

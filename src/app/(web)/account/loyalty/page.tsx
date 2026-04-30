@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Crown, Gift, Star } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -101,11 +98,8 @@ export default function LoyaltyPage() {
   }, [currentTier.name]);
 
   return (
-    <>
-      <Header />
-      <CartDrawer />
-      <main className="flex-1 bg-[var(--dominos-light-gray)]">
-        <AuthGuard>
+    <div className="bg-[var(--dominos-light-gray)]">
+      <AuthGuard>
           <div className="mx-auto max-w-3xl px-4 py-10">
             <h1 className="text-2xl font-bold">VIP Loyalty Club</h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -249,8 +243,6 @@ export default function LoyaltyPage() {
             </div>
           </div>
         </AuthGuard>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }

@@ -7,9 +7,6 @@ import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { BuilderCanvas } from "@/components/pizza-builder/builder-canvas";
 import { CrustSelector, CRUST_PRICE_MODIFIERS } from "@/components/pizza-builder/crust-selector";
 import { SauceSelector } from "@/components/pizza-builder/sauce-selector";
@@ -311,13 +308,9 @@ export default function ProductPage({
   );
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <CartDrawer />
-
-      <main className="flex-1">
-        {/* Back button */}
-        <div className="mx-auto max-w-7xl px-4 pt-4">
+    <>
+      {/* Back button */}
+      <div className="mx-auto max-w-7xl px-4 pt-4">
           <Button
             variant="ghost"
             className="gap-1.5 text-muted-foreground hover:text-foreground"
@@ -432,9 +425,6 @@ export default function ProductPage({
             </div>
           )}
         </div>
-      </main>
-
-      <Footer />
-    </div>
+    </>
   );
 }

@@ -2,9 +2,6 @@
 
 import { useState } from "react";
 import { MapPin, Plus, Pencil, Trash2 } from "lucide-react";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -64,11 +61,8 @@ export default function AddressesPage() {
   }
 
   return (
-    <>
-      <Header />
-      <CartDrawer />
-      <main className="flex-1 bg-[var(--dominos-light-gray)]">
-        <AuthGuard>
+    <div className="bg-[var(--dominos-light-gray)]">
+      <AuthGuard>
           <div className="mx-auto max-w-3xl px-4 py-10">
             <div className="mb-6 flex items-center justify-between">
               <div>
@@ -145,8 +139,6 @@ export default function AddressesPage() {
             )}
           </div>
         </AuthGuard>
-      </main>
-      <Footer />
-    </>
+    </div>
   );
 }
