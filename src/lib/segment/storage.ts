@@ -1,5 +1,6 @@
 // src/lib/segment/storage.ts
 import type { LoggedEvent } from "./types";
+import { analyticsEnabled } from "./config";
 
 const KEY = "segment-demo-event-log";
 const MAX = 500;
@@ -18,6 +19,7 @@ export function loadEvents(): LoggedEvent[] {
 
 export function saveEvents(events: LoggedEvent[]): void {
   if (typeof window === "undefined") return;
+  if (analyticsEnabled) return;
   try {
     const trimmed = events.slice(-MAX);
     window.localStorage.setItem(KEY, JSON.stringify(trimmed));

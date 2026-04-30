@@ -9,6 +9,7 @@ import type {
   JourneyState,
 } from "@/lib/segment/types";
 import { loadEvents, saveEvents, clearEvents, EVENT_LOG_MAX } from "@/lib/segment/storage";
+import { analyticsEnabled } from "@/lib/segment/config";
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 function scheduleSave(events: LoggedEvent[]) {
@@ -88,7 +89,7 @@ export const useSegmentStore = create<SegmentState>()(
       userId: null,
       anonymousId: null,
       traits: {},
-      demoModeEnabled: true,
+      demoModeEnabled: !analyticsEnabled,
       inspectorOpen: false,
       inspectorTab: "events",
       eventFilter: {},

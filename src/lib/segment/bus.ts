@@ -5,6 +5,7 @@ import { useSegmentStore } from "@/stores/segment-store";
 import { useCartStore } from "@/stores/cart-store";
 import { useUIStore } from "@/stores/ui-store";
 import { resolveSourceFromPath, appNameForSource } from "./source";
+import { SEGMENT_WRITE_KEY, analyticsEnabled } from "./config";
 
 const ECOMMERCE_EVENT_PATTERNS = [
   /^Product /, /^Products /, /^Cart /, /^Checkout /, /^Order /, /^Coupon /,
@@ -39,27 +40,19 @@ function buildContextProperties(eventName: string): Record<string, unknown> {
   return ctx;
 }
 
-const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || "";
-const analyticsEnabled = writeKey.length > 0;
-
-// When no write key is configured, pass `disable: true` so the SDK returns a
-// NullAnalytics instance. Otherwise it would attempt to load CDN settings from
-// `/v1/projects//settings`, which rejects and breaks every .track/.identify
-// await downstream. The local store + inspector are the source of truth for
-// the demo regardless of whether the real SDK is enabled.
 const realAnalytics = AnalyticsBrowser.load(
-  { writeKey: writeKey || "demo-placeholder" },
+  { writeKey: SEGMENT_WRITE_KEY || "demo-placeholder" },
   {
     initialPageview: false,
     disable: !analyticsEnabled,
   },
 );
 
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   if (analyticsEnabled) {
-    console.info("[segment] Analytics enabled");
+    console.debug("[segment] Analytics enabled — events forwarded to Segment");
   } else {
-    console.info(
+    console.debug(
       "[segment] Analytics disabled — NEXT_PUBLIC_SEGMENT_WRITE_KEY not set; demo runs locally",
     );
   }
