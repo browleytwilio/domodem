@@ -56,6 +56,19 @@ export interface ComputedTraits {
   session_event_count: number;
   has_applied_coupon: boolean;
   has_viewed_deals: boolean;
+  has_viewed_loyalty: boolean;
+  has_redeemed_points: boolean;
+  has_subscribed_newsletter: boolean;
+  has_played_video: boolean;
+  has_opened_builder: boolean;
+  has_completed_builder: boolean;
+  product_view_count: number;
+  product_add_count: number;
+  is_authenticated: boolean;
+  sources_used: string[];
+  web_event_count: number;
+  mobile_event_count: number;
+  kiosk_event_count: number;
 }
 
 export type JourneyStage =

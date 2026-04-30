@@ -33,6 +33,19 @@ const DEFAULT_COMPUTED: ComputedTraits = {
   session_event_count: 0,
   has_applied_coupon: false,
   has_viewed_deals: false,
+  has_viewed_loyalty: false,
+  has_redeemed_points: false,
+  has_subscribed_newsletter: false,
+  has_played_video: false,
+  has_opened_builder: false,
+  has_completed_builder: false,
+  product_view_count: 0,
+  product_add_count: 0,
+  is_authenticated: false,
+  sources_used: [],
+  web_event_count: 0,
+  mobile_event_count: 0,
+  kiosk_event_count: 0,
 };
 
 function makeDefaultJourney(): JourneyState {
