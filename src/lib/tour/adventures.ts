@@ -30,6 +30,17 @@ export const ADVENTURES: Adventure[] = [
         },
       },
       {
+        kind: "action",
+        copy: "Opening the Segment inspector and bringing up her home page…",
+        advance: "auto",
+        do: async (ctx) => {
+          const { useSegmentStore } = await import("@/stores/segment-store");
+          useSegmentStore.getState().setInspectorOpen(true);
+          useSegmentStore.getState().setInspectorTab("identity");
+          ctx.router.push("/");
+        },
+      },
+      {
         kind: "spotlight",
         target: "tour-personalization-banner",
         copy: "Her home page is already personalized. The copy swapped based on her loyalty_tier trait.",
@@ -93,6 +104,9 @@ export const ADVENTURES: Adventure[] = [
         advance: "auto",
         do: async (ctx) => {
           await ctx.analytics.reset();
+          const { useSegmentStore } = await import("@/stores/segment-store");
+          useSegmentStore.getState().setInspectorOpen(true);
+          useSegmentStore.getState().setInspectorTab("audiences");
           ctx.router.push("/deals");
         },
       },
@@ -238,6 +252,17 @@ export const ADVENTURES: Adventure[] = [
         },
       },
       {
+        kind: "action",
+        copy: "Opening the Segment inspector on Audiences and heading to the menu…",
+        advance: "auto",
+        do: async (ctx) => {
+          const { useSegmentStore } = await import("@/stores/segment-store");
+          useSegmentStore.getState().setInspectorOpen(true);
+          useSegmentStore.getState().setInspectorTab("audiences");
+          ctx.router.push("/menu");
+        },
+      },
+      {
         kind: "spotlight",
         target: "tour-audiences-panel",
         copy: "Cart Abandoner audience is already active from his seeded events.",
@@ -280,6 +305,8 @@ export const ADVENTURES: Adventure[] = [
             category: "pizzas",
             store_id: "store-002",
           });
+          const { useSegmentStore } = await import("@/stores/segment-store");
+          useSegmentStore.getState().setInspectorTab("journey");
         },
       },
       {

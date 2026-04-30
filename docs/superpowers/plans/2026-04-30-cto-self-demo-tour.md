@@ -2320,41 +2320,53 @@ Confirm 4 adventure cards show.
 
 Click **Start** on "Meet Sarah. Everywhere."
 - Confirm navigation to `/tour/meet-sarah`.
-- Confirm narrator panel appears top-right with "Beat 1 of 8".
-- Click **Next** through narrate beats.
-- Persona seed auto-runs (action beat); narrator advances to spotlight beats.
-- Confirm spotlight illuminates the Personalization Banner on the main site. If the banner is not on `/tour`, the user will need to navigate manually; in that case click the `Segment Demo` FAB or use a second tab on `/`. Confirm the narrator waits.
+- Confirm narrator panel appears top-right with "Beat 1 of 9".
+- Click **Next** through the opening narrate beat.
+- Persona seed auto-runs (action beat).
+- Second action beat auto-runs: parent tab navigates to `/`, Event Inspector sheet opens on the Identity tab.
+- Confirm spotlight illuminates the Personalization Banner on the home page (orange/red card, "Welcome back, VIP" copy or similar VIP-tier variant).
+- Click Next; confirm spotlight lands on the Identity panel inside the inspector.
 - Advance to multi-surface beats; confirm iframe triptych appears with mobile focus, then kiosk focus.
+- Confirm the `tour-event-inspector` spotlight lands next.
 - Confirm recap card has two CTAs and the "Back to tour menu" link exits the tour.
 - Confirm the adventure card on `/tour` now shows a green check.
 
 - [ ] **Step 6: Adventure 2 — Build an audience**
 
-Open `/tour` in a fresh tab (the tour state is scoped; you can also click "Reset demo" first for a clean run).
+Click "Segment Demo" FAB → "Reset demo state" first for a clean run.
 Click **Start** on "Build an audience in 60 seconds."
-- Auto-advance redirects to `/deals`.
-- Click any deal. Confirm narrator auto-advances (waits on `Deal Viewed`).
-- Add a pizza to cart from `/menu`. Confirm narrator auto-advances on `Product Added`.
-- Reach the recap. Confirm audiences panel shows `Deal Hunter` + `Cart Abandoner` as members.
+- Auto-advance redirects to `/deals` AND opens the Event Inspector on the Audiences tab.
+- Click any deal card. Confirm narrator auto-advances (waits on `Deal Viewed`).
+- Confirm the Deal Hunter badge in the Audiences panel turns green.
+- Click Next; navigate manually to `/menu` and add any pizza to cart. Confirm narrator auto-advances on `Product Added`.
+- Confirm the Cart Abandoner badge turns green.
+- Click Next through the computed-traits spotlight.
+- Reach the recap.
 
 - [ ] **Step 7: Adventure 3 — Tracking plan**
 
 Start "One tracking plan, every surface."
-- Confirm Event Inspector opens automatically (action beat).
-- In the web pane of the triptych, add a Meat Lovers. Confirm narrator advances on `Product Added`.
-- In the mobile pane, do the same. Advance.
-- In the kiosk pane, do the same. Advance.
-- Confirm the last three events in the inspector all say `Product Added` with different `source` values.
+- Event Inspector opens automatically on the Events tab (action beat).
+- Triptych renders with three iframes (web / mobile / kiosk).
+- In the web pane, navigate to `/menu` and add a Meat Lovers. Parent tab's Event Inspector should show the `Product Added` event arriving from the iframe (this proves the BroadcastChannel receiver is wired correctly). Narrator advances on `Product Added`.
+- Click Next through the spotlight on the latest event row.
+- Repeat in the mobile iframe: navigate to `/m/menu`, add a Meat Lovers. Narrator advances.
+- Repeat in the kiosk iframe: navigate to `/kiosk/menu`, add a Meat Lovers. Narrator advances.
+- Confirm three `Product Added` events are visible in the inspector; only the `source` property differs (`web`, `mobile`, `kiosk`).
+- Reach the recap.
 
 - [ ] **Step 8: Adventure 4 — Cart rescue**
 
 Start "The cart abandonment rescue."
 - Dan's persona seeds automatically.
-- Click Next through the "Watch. Just wait." beat.
-- Wait ~15s. Confirm the Sonner toast fires.
-- Confirm narrator advances on `Audience Entered`.
-- Confirm the inbox modal opens.
-- Click Next; confirm journey panel shows stage advance after the mock `Order Completed`.
+- Second action beat auto-runs: Event Inspector opens on the Audiences tab, parent tab navigates to `/menu`.
+- Confirm the Cart Abandoner badge is already green.
+- Click Next through the spotlight and the "Watch. Just wait." narrate beat.
+- Within 15s, confirm the Sonner toast fires in the bottom-right ("Don't forget your cart!"). Narrator advances on `Audience Entered`.
+- The inbox modal opens automatically. Click Next through the modal narrate beat.
+- `Order Completed` fires automatically; inspector tab flips to Journey.
+- Confirm the Journey panel shows stage advance (visitor → engaged → customer or similar).
+- Reach the recap.
 
 - [ ] **Step 9: Reload mid-tour**
 

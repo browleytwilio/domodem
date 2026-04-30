@@ -69,6 +69,21 @@ async function safeAwait<T>(p: PromiseLike<T>): Promise<T | null> {
 
 const CHANNEL_NAME = "segment-demo-events";
 
+function newId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `evt-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+const SENDER_ID: string =
+  typeof window === "undefined" ? "ssr" : `bus-${newId()}`;
+
+interface BroadcastPayload {
+  event: LoggedEvent;
+  senderId: string;
+}
+
 let sharedChannel: BroadcastChannel | null = null;
 function channel(): BroadcastChannel | null {
   if (typeof window === "undefined" || typeof BroadcastChannel === "undefined") {
@@ -76,14 +91,14 @@ function channel(): BroadcastChannel | null {
   }
   if (sharedChannel) return sharedChannel;
   sharedChannel = new BroadcastChannel(CHANNEL_NAME);
+  sharedChannel.onmessage = (ev: MessageEvent<BroadcastPayload>) => {
+    const msg = ev.data;
+    if (!msg || msg.senderId === SENDER_ID) return;
+    // Replay into the local store only. Do NOT forward to realAnalytics —
+    // the origin frame already sent to Segment.
+    useSegmentStore.getState().appendEvent(msg.event);
+  };
   return sharedChannel;
-}
-
-function newId(): string {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `evt-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 async function getIdentity(): Promise<{ userId: string | null; anonymousId: string | null }> {
@@ -110,7 +125,8 @@ async function getIdentity(): Promise<{ userId: string | null; anonymousId: stri
 
 function record(event: LoggedEvent) {
   useSegmentStore.getState().appendEvent(event);
-  channel()?.postMessage(event);
+  const payload: BroadcastPayload = { event, senderId: SENDER_ID };
+  channel()?.postMessage(payload);
 }
 
 export const analytics = {
