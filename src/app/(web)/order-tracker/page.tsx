@@ -13,15 +13,21 @@ export default function OrderTrackerLandingPage() {
   const router = useRouter();
   const currentOrder = useOrderStore((s) => s.currentOrder);
   const [orderNumber, setOrderNumber] = useState("");
-  const [redirecting, setRedirecting] = useState(false);
 
-  // If there is a current active order, redirect automatically
+  // Derive redirect intent during render so we don't need to setState in an
+  // effect. The router.replace side-effect still fires inside useEffect.
+  const redirecting = Boolean(
+    currentOrder &&
+      currentOrder.status !== "delivered" &&
+      currentOrder.status !== "ready_for_pickup",
+  );
+  const redirectId = redirecting ? currentOrder!.id : null;
+
   useEffect(() => {
-    if (currentOrder && currentOrder.status !== "delivered" && currentOrder.status !== "ready_for_pickup") {
-      setRedirecting(true);
-      router.replace(`/order-tracker/${currentOrder.id}`);
+    if (redirectId) {
+      router.replace(`/order-tracker/${redirectId}`);
     }
-  }, [currentOrder, router]);
+  }, [redirectId, router]);
 
   function handleTrackOrder() {
     const trimmed = orderNumber.trim();

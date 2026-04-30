@@ -53,8 +53,8 @@ export function JourneyPanel() {
           Stage history
         </h4>
         <ol className="space-y-1">
-          {journey.history.map((h, i) => (
-            <li key={i} className="flex justify-between text-xs">
+          {journey.history.map((h) => (
+            <li key={`${h.stage}-${h.at}`} className="flex justify-between text-xs">
               <span className="font-medium capitalize">{h.stage.replace("_", " ")}</span>
               <span className="text-muted-foreground">
                 {new Date(h.at).toLocaleTimeString()}

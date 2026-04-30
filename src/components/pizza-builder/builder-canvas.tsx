@@ -105,7 +105,7 @@ function generateDotPositions(
     const radius = Math.sqrt(rng()) * 0.38; // keep inside the crust
 
     let x = 0.5 + radius * Math.cos(angle);
-    let y = 0.5 + radius * Math.sin(angle);
+    const y = 0.5 + radius * Math.sin(angle);
 
     // Constrain to half if needed
     if (placement === "left" && x > 0.5) {

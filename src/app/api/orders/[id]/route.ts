@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { orders, orderItems } from "@/lib/db/schema";
+import { orders } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import type { Order, OrderStatus, CartItem } from "@/types/order";
 

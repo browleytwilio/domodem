@@ -92,7 +92,7 @@ export function TrackerProgress({
             }}
           />
 
-          {steps.map((step, i) => {
+          {steps.map((step) => {
             const stepIdx = statusIndex(step.key);
             const isCompleted = stepIdx < currentIdx;
             const isCurrent = stepIdx === currentIdx;

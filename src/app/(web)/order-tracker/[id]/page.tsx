@@ -7,6 +7,7 @@ import { TrackerProgress } from "@/components/order-tracker/tracker-progress";
 import { TrackerDetails } from "@/components/order-tracker/tracker-details";
 import { Button } from "@/components/ui/button";
 import { useOrderStore } from "@/stores/order-store";
+import { useOnlineStatus } from "@/lib/use-online-status";
 import {
   trackOrderTrackerViewed,
   trackOrderStatusChanged,
@@ -73,24 +74,20 @@ export default function OrderTrackerPage({
       ? storedOrder
       : orderHistory.find((o) => o.id === id) ?? null;
 
-  // Local order state for simulation
-  const [order, setOrder] = useState<Order | null>(baseOrder);
+  // Local order state for polling updates. `order` derives from the local
+  // override if present, otherwise falls through to whatever the store has.
+  // This avoids a sync-effect and keeps the two sources consistent.
+  const [localOrder, setLocalOrder] = useState<Order | null>(null);
+  const order = localOrder ?? baseOrder;
   const [countdown, setCountdown] = useState("");
   const trackedRef = useRef(false);
   const prevStatusRef = useRef<OrderStatus | null>(null);
 
   const updateOrderInHistory = useOrderStore((s) => s.updateOrderInHistory);
-  const [isOffline, setIsOffline] = useState(false);
+  const isOffline = !useOnlineStatus();
   const [isStale, setIsStale] = useState(false);
-  const lastSuccessRef = useRef(Date.now());
+  const lastSuccessRef = useRef<number | null>(null);
   const backoffRef = useRef(5_000);
-
-  // Sync base order into local state
-  useEffect(() => {
-    if (baseOrder && !order) {
-      setOrder(baseOrder);
-    }
-  }, [baseOrder, order]);
 
   // --------------------------------------------------------------------------
   // Analytics: track view on mount
@@ -105,22 +102,6 @@ export default function OrderTrackerPage({
   }, [order]);
 
   // --------------------------------------------------------------------------
-  // Offline detection
-  // --------------------------------------------------------------------------
-
-  useEffect(() => {
-    const goOffline = () => setIsOffline(true);
-    const goOnline = () => setIsOffline(false);
-    window.addEventListener("offline", goOffline);
-    window.addEventListener("online", goOnline);
-    setIsOffline(!navigator.onLine);
-    return () => {
-      window.removeEventListener("offline", goOffline);
-      window.removeEventListener("online", goOnline);
-    };
-  }, []);
-
-  // --------------------------------------------------------------------------
   // Server polling (every 10s, replaces client-side simulation)
   // --------------------------------------------------------------------------
 
@@ -131,6 +112,9 @@ export default function OrderTrackerPage({
     if (isOffline) return;
 
     let cancelled = false;
+    if (lastSuccessRef.current === null) {
+      lastSuccessRef.current = Date.now();
+    }
 
     const poll = async () => {
       try {
@@ -160,12 +144,13 @@ export default function OrderTrackerPage({
         }
         prevStatusRef.current = data.status;
 
-        setOrder(data);
+        setLocalOrder(data);
         setCurrentOrder(data);
         updateOrderInHistory(data);
       } catch {
         backoffRef.current = Math.min(backoffRef.current * 2, 30_000);
-        if (Date.now() - lastSuccessRef.current > 60_000) {
+        const last = lastSuccessRef.current ?? Date.now();
+        if (Date.now() - last > 60_000) {
           setIsStale(true);
         }
       }
@@ -183,18 +168,18 @@ export default function OrderTrackerPage({
   // ETA countdown
   // --------------------------------------------------------------------------
 
+  const eta = order?.estimatedDelivery;
   useEffect(() => {
-    if (!order?.estimatedDelivery) return;
+    if (!eta) return;
 
+    const target = new Date(eta).getTime();
     function tick() {
-      const remaining =
-        new Date(order!.estimatedDelivery!).getTime() - Date.now();
-      setCountdown(formatCountdown(remaining));
+      setCountdown(formatCountdown(target - Date.now()));
     }
     tick();
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [order?.estimatedDelivery]);
+  }, [eta]);
 
   // --------------------------------------------------------------------------
   // Not found state

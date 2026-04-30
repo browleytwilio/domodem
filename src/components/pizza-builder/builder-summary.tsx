@@ -4,7 +4,6 @@ import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import type { Product, PizzaSize, CrustType, ToppingSelection } from "@/types/menu";
 
 interface BuilderSummaryProps {

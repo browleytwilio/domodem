@@ -143,33 +143,27 @@ export default function ProductPage({
   const addItem = useCartStore((s) => s.addItem);
   const setCartOpen = useUIStore((s) => s.setCartOpen);
 
-  const [size, setSize] = useState<PizzaSize>("large");
+  // Lazy initializers derive defaults from product on first render only.
+  // No sync-effect needed.
+  const [size, setSize] = useState<PizzaSize>(() =>
+    product?.prices.large !== undefined ? "large" : "value",
+  );
   const [crust, setCrust] = useState<CrustType>("classic");
-  const [sauce, setSauce] = useState<string>("tomato-sauce");
+  const [sauce, setSauce] = useState<string>(() =>
+    product ? findDefaultSauce(product) : "tomato-sauce",
+  );
   const [selectedToppings, setSelectedToppings] = useState<ToppingSelection[]>(
-    []
+    () => (product ? resolveDefaultToppings(product) : []),
   );
   const [quantity, setQuantity] = useState(1);
-  const [hasInitialized, setHasInitialized] = useState(false);
 
-  // Initialize state from product defaults once
+  // Track builder opened on mount (once per product)
   useEffect(() => {
-    if (!product || hasInitialized) return;
-    const defaultSize: PizzaSize =
-      product.prices.large !== undefined ? "large" : "value";
-    setSize(defaultSize);
-    setSelectedToppings(resolveDefaultToppings(product));
-    setSauce(findDefaultSauce(product));
-    setHasInitialized(true);
-  }, [product, hasInitialized]);
-
-  // Track builder opened on mount
-  useEffect(() => {
-    if (!product || !hasInitialized) return;
+    if (!product) return;
     trackPizzaBuilderOpened(product.slug, size, "/menu");
-    // Only fire once on mount
+    // Only fire once per product slug — size is the initial value above.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasInitialized]);
+  }, [product?.slug]);
 
   // Calculate total price
   const totalPrice = useMemo(() => {

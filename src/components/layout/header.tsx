@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -18,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { useCartStore } from "@/stores/cart-store";
 import { useUIStore } from "@/stores/ui-store";
+import { useIsHydrated } from "@/lib/use-is-hydrated";
 import { cn } from "@/lib/utils";
 
 const mainNav = [
@@ -26,6 +26,7 @@ const mainNav = [
   { label: "Stores", href: "/store-locator" },
   { label: "Tracker", href: "/order-tracker" },
   { label: "VIP Club", href: "/account/loyalty" },
+  { label: "Use Cases", href: "/use-cases" },
 ];
 
 export function Header() {
@@ -33,10 +34,7 @@ export function Header() {
   const itemCount = useCartStore((s) => s.getItemCount());
   const { deliveryMethod, setDeliveryMethod, selectedStore, setCartOpen } =
     useUIStore();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsHydrated();
 
   return (
     <header className="sticky top-0 z-50 w-full">

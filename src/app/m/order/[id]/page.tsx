@@ -56,9 +56,9 @@ export default function MobileOrderTrackerPage() {
                 : "—"}
             </p>
             <div className="mt-4 flex flex-col divide-y divide-border/60">
-              {order.items.map((item, idx) => (
+              {order.items.map((item) => (
                 <div
-                  key={idx}
+                  key={item.id}
                   className="flex justify-between py-2 text-sm"
                 >
                   <span>

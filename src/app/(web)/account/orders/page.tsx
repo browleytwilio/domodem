@@ -55,30 +55,41 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchOrders = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/orders");
-      if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`);
-      }
-      const data = await res.json();
-      setOrders(data);
-    } catch (err) {
-      const msg =
-        err instanceof TypeError
-          ? "Connection issue — check your network and try again."
-          : "We couldn't load your orders. Please try again.";
-      setError(msg);
-    } finally {
-      setLoading(false);
-    }
+  const [reloadToken, setReloadToken] = useState(0);
+  const fetchOrders = useCallback(() => {
+    setReloadToken((t) => t + 1);
   }, []);
 
   useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
+    let cancelled = false;
+
+    (async () => {
+      if (cancelled) return;
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch("/api/orders");
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}`);
+        }
+        const data = await res.json();
+        if (!cancelled) setOrders(data);
+      } catch (err) {
+        if (cancelled) return;
+        const msg =
+          err instanceof TypeError
+            ? "Connection issue — check your network and try again."
+            : "We couldn't load your orders. Please try again.";
+        setError(msg);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadToken]);
 
   return (
     <div className="bg-[var(--dominos-light-gray)]">
