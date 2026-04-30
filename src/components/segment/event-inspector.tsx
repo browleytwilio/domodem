@@ -24,6 +24,7 @@ export function EventInspector() {
       <SheetContent
         side="right"
         className="@container/inspector flex w-full max-w-none flex-col p-0 sm:w-1/2 sm:min-w-[640px]"
+        data-tour-id="tour-event-inspector"
       >
         <header className="flex items-center justify-between border-b px-6 py-4 pr-12">
           <div className="flex items-center gap-2">

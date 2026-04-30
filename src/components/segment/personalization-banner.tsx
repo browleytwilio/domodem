@@ -198,6 +198,7 @@ export function PersonalizationBanner() {
       transition={{ duration: 0.4 }}
       className={`relative w-full overflow-hidden bg-gradient-to-r ${match.gradient}`}
       aria-label="Personalized banner"
+      data-tour-id="tour-personalization-banner"
     >
       <div className="mx-auto flex max-w-7xl flex-col items-start gap-3 px-6 py-8 md:flex-row md:items-center md:justify-between md:py-10">
         <div className="flex flex-col gap-1.5 text-white">

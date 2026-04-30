@@ -9,7 +9,7 @@ export function JourneyPanel() {
   const currentIdx = JOURNEY_STAGES.findIndex((s) => s.stage === journey.stage);
 
   return (
-    <div className="flex flex-col gap-4 p-6 text-sm">
+    <div className="flex flex-col gap-4 p-6 text-sm" data-tour-id="tour-journey-panel">
       <div className="flex items-center gap-2">
         <Route className="h-4 w-4 text-muted-foreground" />
         <h3 className="font-semibold">Customer Journey</h3>

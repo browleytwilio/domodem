@@ -28,7 +28,7 @@ export function IdentityPanel() {
   const traitEntries = Object.entries(traits);
 
   return (
-    <div className="flex flex-col gap-4 p-6 text-sm">
+    <div className="flex flex-col gap-4 p-6 text-sm" data-tour-id="tour-identity-panel">
       <div className="grid gap-4 @3xl/inspector:grid-cols-[1fr_1.4fr]">
       <section className="rounded-lg border bg-card p-4">
         <div className="mb-3 flex items-center gap-2">

@@ -118,14 +118,24 @@ export function EventStream() {
                 No events match your filter.
               </p>
             ) : (
-              filtered.map((event) => (
-                <EventRow
-                  key={event.id}
-                  event={event}
-                  selected={selected?.id === event.id}
-                  onClick={() => setSelected(event)}
-                />
-              ))
+              filtered.map((event, idx) =>
+                idx === 0 ? (
+                  <div key={event.id} data-tour-id="tour-event-inspector-latest">
+                    <EventRow
+                      event={event}
+                      selected={selected?.id === event.id}
+                      onClick={() => setSelected(event)}
+                    />
+                  </div>
+                ) : (
+                  <EventRow
+                    key={event.id}
+                    event={event}
+                    selected={selected?.id === event.id}
+                    onClick={() => setSelected(event)}
+                  />
+                ),
+              )
             )}
           </div>
         </ScrollArea>

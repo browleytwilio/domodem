@@ -26,7 +26,7 @@ export function ComputedTraitsPanel() {
   ];
 
   return (
-    <div className="flex flex-col gap-3 p-6 text-sm">
+    <div className="flex flex-col gap-3 p-6 text-sm" data-tour-id="tour-computed-traits-panel">
       <div className="flex items-center gap-2">
         <Calculator className="h-4 w-4 text-muted-foreground" />
         <h3 className="font-semibold">Computed Traits</h3>
