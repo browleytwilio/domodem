@@ -533,6 +533,10 @@ cd /Users/browley/video/dominos-vip-demo && git add STORYBOARD.md && git commit 
 
 ## Task 7: Produce screen captures
 
+> **SUPERSEDED by** `docs/superpowers/plans/2026-04-30-vip-video-playwright-captures.md`. Use that plan to capture deterministic PNG stills via Playwright against the deployed demo at `https://domodem.vercel.app/` instead of driving Chrome DevTools' recorder by hand. The companion plan also rewrites the footage-wrapped compositions (Beats 3, 4, 5, 6, 7, and the Beat 8 kiosk inset) to consume the PNG stills with Ken-Burns + cross-fade motion. Apply the companion plan, then skip Tasks 7, 11, 12, 13, 14 in this file and treat Task 18's kiosk inset as updated.
+
+
+
 **Files:**
 - Create: `/Users/browley/video/dominos-vip-demo/assets/captures/cap-anon-browse.mp4`
 - Create: `/Users/browley/video/dominos-vip-demo/assets/captures/cap-signin-transition.mp4`
