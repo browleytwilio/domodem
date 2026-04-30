@@ -314,12 +314,10 @@ export default function ProductPage({
           <Button
             variant="ghost"
             className="gap-1.5 text-muted-foreground hover:text-foreground"
-            asChild
+            render={<Link href="/menu" />}
           >
-            <Link href="/menu">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Menu
-            </Link>
+            <ArrowLeft className="h-4 w-4" />
+            Back to Menu
           </Button>
         </div>
 

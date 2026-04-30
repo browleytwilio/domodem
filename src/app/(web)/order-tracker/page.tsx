@@ -103,9 +103,9 @@ export default function OrderTrackerLandingPage() {
             <Button
               className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
               size="lg"
-              asChild
+              render={<Link href="/menu" />}
             >
-              <Link href="/menu">Start a New Order</Link>
+              Start a New Order
             </Button>
           </div>
         </div>

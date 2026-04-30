@@ -283,12 +283,10 @@ export default function CheckoutPage() {
         <Button
           className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
           size="lg"
-          asChild
+          render={<Link href="/menu" />}
         >
-          <Link href="/menu">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Browse Menu
-          </Link>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Browse Menu
         </Button>
       </div>
     );

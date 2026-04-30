@@ -44,11 +44,12 @@ export default function ErrorBoundary({
           <RotateCcw className="h-4 w-4" />
           Try again
         </Button>
-        <Button asChild className="gap-1.5 bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90">
-          <Link href="/">
-            <Home className="h-4 w-4" />
-            Home
-          </Link>
+        <Button
+          render={<Link href="/" />}
+          className="gap-1.5 bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
+        >
+          <Home className="h-4 w-4" />
+          Home
         </Button>
       </div>
     </div>

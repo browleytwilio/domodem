@@ -91,8 +91,8 @@ export default function OrdersPage() {
                   View and manage your past orders.
                 </p>
               </div>
-              <Button asChild className="bg-[var(--dominos-red)] text-white hover:bg-[var(--dominos-red)]/90">
-                <Link href="/menu">Order Again</Link>
+              <Button render={<Link href="/menu" />} className="bg-[var(--dominos-red)] text-white hover:bg-[var(--dominos-red)]/90">
+                Order Again
               </Button>
             </div>
 
@@ -131,10 +131,10 @@ export default function OrdersPage() {
                     Your order history will appear here once you place your first order.
                   </p>
                   <Button
-                    asChild
+                    render={<Link href="/menu" />}
                     className="bg-[var(--dominos-red)] text-white hover:bg-[var(--dominos-red)]/90"
                   >
-                    <Link href="/menu">Browse Menu</Link>
+                    Browse Menu
                   </Button>
                 </CardContent>
               </Card>
@@ -184,12 +184,10 @@ export default function OrdersPage() {
                                 variant="outline"
                                 size="sm"
                                 className="gap-1.5"
-                                asChild
+                                render={<Link href="/menu" />}
                               >
-                                <Link href="/menu">
-                                  <RotateCcw className="h-3.5 w-3.5" />
-                                  Reorder
-                                </Link>
+                                <RotateCcw className="h-3.5 w-3.5" />
+                                Reorder
                               </Button>
                             )}
                             {isActive && (
@@ -197,12 +195,10 @@ export default function OrdersPage() {
                                 variant="outline"
                                 size="sm"
                                 className="gap-1.5"
-                                asChild
+                                render={<Link href={`/order-tracker/${order.id}`} />}
                               >
-                                <Link href={`/order-tracker/${order.id}`}>
-                                  <MapPin className="h-3.5 w-3.5" />
-                                  Track Order
-                                </Link>
+                                <MapPin className="h-3.5 w-3.5" />
+                                Track Order
                               </Button>
                             )}
                           </div>

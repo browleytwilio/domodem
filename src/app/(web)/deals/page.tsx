@@ -151,23 +151,23 @@ function DealCard({ deal, index }: { deal: Deal; index: number }) {
         <Button
           className="w-full bg-[var(--dominos-red)] font-semibold hover:bg-[var(--dominos-red)]/90"
           size="lg"
-          asChild
+          render={
+            <Link
+              href={firstProduct ? `/menu?deal=${deal.code}` : "/menu"}
+              onClick={() =>
+                trackPromotionClicked(deal.id, deal.name, position, {
+                  discount_value: deal.originalPrice - deal.price,
+                  creative: deal.badge ?? undefined,
+                  destination_url: firstProduct
+                    ? `/menu?deal=${deal.code}`
+                    : "/menu",
+                })
+              }
+            />
+          }
         >
-          <Link
-            href={firstProduct ? `/menu?deal=${deal.code}` : "/menu"}
-            onClick={() =>
-              trackPromotionClicked(deal.id, deal.name, position, {
-                discount_value: deal.originalPrice - deal.price,
-                creative: deal.badge ?? undefined,
-                destination_url: firstProduct
-                  ? `/menu?deal=${deal.code}`
-                  : "/menu",
-              })
-            }
-          >
-            Order Now
-            <ArrowRight className="ml-1 h-4 w-4" />
-          </Link>
+          Order Now
+          <ArrowRight className="ml-1 h-4 w-4" />
         </Button>
       </div>
     </div>
@@ -228,12 +228,10 @@ export default function DealsPage() {
           <Button
             className="bg-white font-bold text-[var(--dominos-blue)] hover:bg-white/90"
             size="lg"
-            asChild
+            render={<Link href="/menu" />}
           >
-            <Link href="/menu">
-              View Full Menu
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
+            View Full Menu
+            <ArrowRight className="ml-1 h-4 w-4" />
           </Button>
         </div>
     </div>

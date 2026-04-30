@@ -181,11 +181,9 @@ export function Header() {
               size="icon"
               aria-label="Search menu"
               className="text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/60 active:scale-95"
-              asChild
+              render={<Link href="/menu" />}
             >
-              <Link href="/menu">
-                <Search className="h-5 w-5" />
-              </Link>
+              <Search className="h-5 w-5" />
             </Button>
 
             <Button
@@ -193,11 +191,9 @@ export function Header() {
               size="icon"
               aria-label="Account"
               className="text-white hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white/60 active:scale-95"
-              asChild
+              render={<Link href="/account" />}
             >
-              <Link href="/account">
-                <User className="h-5 w-5" />
-              </Link>
+              <User className="h-5 w-5" />
             </Button>
 
             <Button

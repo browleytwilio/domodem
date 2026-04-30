@@ -73,9 +73,9 @@ export function CartDrawer() {
             <Button
               className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
               onClick={() => setCartOpen(false)}
-              asChild
+              render={<Link href="/menu" />}
             >
-              <Link href="/menu">Browse Menu</Link>
+              Browse Menu
             </Button>
           </div>
         ) : (
@@ -165,10 +165,10 @@ export function CartDrawer() {
               <Button
                 className="mt-4 w-full bg-[var(--dominos-red)] text-base font-bold hover:bg-[var(--dominos-red)]/90 focus-visible:ring-[var(--dominos-red)]/40 active:scale-[0.98]"
                 size="lg"
-                asChild
+                render={<Link href="/checkout" />}
                 onClick={() => setCartOpen(false)}
               >
-                <Link href="/checkout">Checkout · ${total.toFixed(2)}</Link>
+                Checkout · ${total.toFixed(2)}
               </Button>
             </div>
           </>

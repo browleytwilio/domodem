@@ -154,14 +154,14 @@ export function ProductCard({ product }: ProductCardProps) {
           <Button
             className="w-full bg-[var(--dominos-red)] font-semibold text-white hover:bg-[var(--dominos-red)]/90"
             size="lg"
-            asChild
+            render={
+              <Link
+                href={`/product/${product.slug}`}
+                onClick={(e) => e.stopPropagation()}
+              />
+            }
           >
-            <Link
-              href={`/product/${product.slug}`}
-              onClick={(e) => e.stopPropagation()}
-            >
-              Customise
-            </Link>
+            Customise
           </Button>
         ) : (
           <Button

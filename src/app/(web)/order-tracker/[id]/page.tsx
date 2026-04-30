@@ -214,12 +214,10 @@ export default function OrderTrackerPage({
         <Button
           className="bg-[var(--dominos-red)] hover:bg-[var(--dominos-red)]/90"
           size="lg"
-          asChild
+          render={<Link href="/menu" />}
         >
-          <Link href="/menu">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Menu
-          </Link>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Menu
         </Button>
       </div>
     );
