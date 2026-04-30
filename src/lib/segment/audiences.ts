@@ -107,6 +107,10 @@ export function computeTraits(input: ComputeInput): ComputedTraits {
     .filter(([, n]) => n > 0)
     .map(([s]) => s);
 
+  const tours_completed_count = events.filter(
+    (e) => e.kind === "track" && e.name === "Tour Completed",
+  ).length;
+
   return {
     lifetime_orders,
     lifetime_spend: Math.round(lifetime_spend * 100) / 100,
@@ -132,6 +136,7 @@ export function computeTraits(input: ComputeInput): ComputedTraits {
     web_event_count: sourceCounts.web,
     mobile_event_count: sourceCounts.mobile,
     kiosk_event_count: sourceCounts.kiosk,
+    tours_completed_count,
   };
 }
 
@@ -320,6 +325,13 @@ export const AUDIENCES: AudienceDefinition[] = [
     description: "Completed a newsletter signup",
     color: "bg-green-600",
     match: ({ computedTraits }) => computedTraits.has_subscribed_newsletter,
+  },
+  {
+    id: "tour_graduates",
+    name: "Tour Graduates",
+    description: "Completed at least one self-demo tour",
+    color: "bg-emerald-600",
+    match: ({ computedTraits }) => computedTraits.tours_completed_count >= 1,
   },
 ];
 

@@ -46,6 +46,7 @@ const DEFAULT_COMPUTED: ComputedTraits = {
   web_event_count: 0,
   mobile_event_count: 0,
   kiosk_event_count: 0,
+  tours_completed_count: 0,
 };
 
 function makeDefaultJourney(): JourneyState {

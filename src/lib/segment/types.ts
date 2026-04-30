@@ -69,6 +69,7 @@ export interface ComputedTraits {
   web_event_count: number;
   mobile_event_count: number;
   kiosk_event_count: number;
+  tours_completed_count: number;
 }
 
 export type JourneyStage =
