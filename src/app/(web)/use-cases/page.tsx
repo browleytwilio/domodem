@@ -1,144 +1,23 @@
 import Link from "next/link";
 import {
-  Crown,
-  ShoppingCart,
-  Tag,
-  UserRound,
   Monitor,
   ArrowRight,
   BarChart3,
   Zap,
   Eye,
   TrendingUp,
+  LayoutGrid,
+  Play,
 } from "lucide-react";
+import { AUDIENCE_ATLAS, colorById, nameById, type Surface } from "./atlas-data";
+import { STORIES } from "./stories-data";
 
-const stories = [
-  {
-    id: "vip-recognition",
-    title: "VIP Recognition & Loyalty",
-    persona: "Sarah",
-    personaDetail: "Gold tier, 12 orders, $386 lifetime spend",
-    icon: Crown,
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
-    borderColor: "border-purple-200",
-    challenge:
-      "How does Domino's recognize its highest-value customers the moment they return and deliver an experience that reinforces loyalty?",
-    whatYouSee: [
-      "A personalized hero banner: \"Welcome back, VIP — Your exclusive 3-large combo is waiting at $35.95\"",
-      "Cart pre-loaded with Sarah's usual order (Meat Lovers + Garlic Bread)",
-      "VIP-exclusive pricing not visible to other audience segments",
-    ],
-    howSegmentPowers: [
-      "Real-time audience evaluation checks lifetime_spend >= $100 and lifetime_orders >= 5",
-      "Computed traits (lifetime_spend, avg_order_value) are calculated from the event stream on every interaction",
-      "Identity resolution links Sarah's anonymous browsing to her authenticated profile the moment she logs in",
-    ],
-    businessImpact:
-      "VIP customers shown exclusive offers see 22% higher AOV and 3x repeat purchase frequency compared to generic messaging.",
-    cta: { label: "Try the VIP Flow", href: "/" },
-  },
-  {
-    id: "cart-abandonment",
-    title: "Cart Abandonment Recovery",
-    persona: "Dan",
-    personaDetail: "Bronze tier, 2 items in cart, left before checkout",
-    icon: ShoppingCart,
-    color: "text-orange-600",
-    bgColor: "bg-orange-50",
-    borderColor: "border-orange-200",
-    challenge:
-      "A customer adds items to their cart, gets distracted, and leaves. How does Domino's bring them back before the craving fades?",
-    whatYouSee: [
-      "After 45 seconds of inactivity, a toast nudge appears: \"Don't forget your cart! Complete your order in the next 10 min for free garlic bread.\"",
-      "The homepage banner changes to: \"Come back to your cart — free garlic bread if you finish now\"",
-      "The Event Inspector shows the Cart Abandoner audience activate in real time",
-    ],
-    howSegmentPowers: [
-      "Behavioral audience rule: cart_item_count > 0 AND no \"Order Completed\" event in session",
-      "Time-based trigger evaluates audience membership continuously — the moment conditions are met, the user enters the segment",
-      "Journey classification advances to \"Cart Abandoner\" stage, unlocking retention workflows",
-    ],
-    businessImpact:
-      "Real-time cart abandonment nudges recover 8-12% of would-be lost orders — without waiting for an email that arrives hours later.",
-    cta: { label: "Try the Abandonment Flow", href: "/" },
-  },
-  {
-    id: "deal-targeting",
-    title: "Deal-Sensitive Targeting",
-    persona: "Mia",
-    personaDetail: "Silver tier, coupon user, lunch combo buyer",
-    icon: Tag,
-    color: "text-rose-600",
-    bgColor: "bg-rose-50",
-    borderColor: "border-rose-200",
-    challenge:
-      "Price-sensitive customers need to feel they're getting value — but blanket discounting erodes margins. How does Domino's target deals to the right people?",
-    whatYouSee: [
-      "Banner: \"More deals, just for you — Exclusive coupons based on your favourites\"",
-      "Next Best Offer widget recommends: \"Lunch Combo $9.95 — Your favourite kind of deal\"",
-      "The coupon code LUNCH1295 is surfaced because Mia's behavioral profile shows coupon affinity",
-    ],
-    howSegmentPowers: [
-      "Deal Hunter audience triggers on has_viewed_deals OR has_applied_coupon — two behavioral signals that indicate price sensitivity",
-      "Computed traits track coupon usage patterns across sessions",
-      "The personalization layer renders deal-first messaging only for this segment — other customers see menu-first experiences",
-    ],
-    businessImpact:
-      "Targeted deal surfacing increases conversion for price-sensitive segments by 35% while protecting full-price revenue from non-deal-seekers.",
-    cta: { label: "Try the Deals Flow", href: "/deals" },
-  },
-  {
-    id: "cold-start",
-    title: "Cold-Start Personalization",
-    persona: "Anonymous Visitor",
-    personaDetail: "No account, first visit, browsing pizzas",
-    icon: UserRound,
-    color: "text-sky-600",
-    bgColor: "bg-sky-50",
-    borderColor: "border-sky-200",
-    challenge:
-      "A brand-new visitor lands on the site with zero history. Can Domino's still personalize without a login or cookie history?",
-    whatYouSee: [
-      "Default hero: \"Any 3 Pizzas from $29.95\" — the highest-converting offer for new traffic",
-      "After browsing the pizzas category, the Next Best Offer adapts based on in-session signals",
-      "The New Visitors audience activates immediately (no userId, session events > 0)",
-    ],
-    howSegmentPowers: [
-      "Anonymous tracking via anonymousId captures intent signals (Product List Viewed, Hero Banner Clicked) before identification",
-      "Session-based audience rules evaluate in real time — no backend sync required",
-      "When the visitor eventually signs up, alias() merges the anonymous history into their new profile (progressive profiling)",
-    ],
-    businessImpact:
-      "In-session personalization for anonymous visitors lifts add-to-cart rate by 18% compared to static content — turning first-time browsers into first-time buyers.",
-    cta: { label: "Try the Anonymous Flow", href: "/" },
-  },
-  {
-    id: "omnichannel-kiosk",
-    title: "Omnichannel Kiosk Experience",
-    persona: "All Personas",
-    personaDetail: "In-store self-order terminal with loyalty scan",
-    icon: Monitor,
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-50",
-    borderColor: "border-emerald-200",
-    challenge:
-      "A customer who orders online walks into a store. Does the kiosk recognize them? Does their loyalty status, order history, and preferences carry over?",
-    whatYouSee: [
-      "Attract screen with \"TAP TO ORDER\" and QR loyalty scan zone",
-      "Scanning a loyalty card loads the customer's full profile — tier, points, preferred items",
-      "90-second idle timeout resets the session cleanly for the next customer",
-    ],
-    howSegmentPowers: [
-      "Cross-surface identity: the same userId links web, mobile, and kiosk events into a unified profile",
-      "trackKioskSessionStarted fires with identified: true when loyalty is scanned, connecting in-store to digital",
-      "Session management via analytics.reset() ensures clean handoff between kiosk users — no data bleed",
-    ],
-    businessImpact:
-      "Omnichannel customers who are recognized in-store spend 40% more per visit and visit 2x more frequently than anonymous kiosk users.",
-    cta: { label: "Try the Kiosk", href: "/kiosk" },
-  },
-];
+const SURFACE_BADGE_STYLES: Record<Surface, string> = {
+  Banner: "bg-rose-100 text-rose-700 border-rose-200",
+  Offer: "bg-blue-100 text-blue-700 border-blue-200",
+  "Kiosk Banner": "bg-cyan-100 text-cyan-700 border-cyan-200",
+  Toast: "bg-amber-100 text-amber-700 border-amber-200",
+};
 
 export default function UseCasesPage() {
   return (
@@ -153,9 +32,9 @@ export default function UseCasesPage() {
           See Segment in Action
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          Each use case below tells the story of a real customer moment —
-          what&apos;s happening on screen, how Segment powers it behind the
-          scenes, and the business outcome it drives for Domino&apos;s.
+          Every audience and every flow you can demo on this site. Start with
+          the atlas, then walk through the flow stories — each one ends with a
+          repro checklist you can run live.
         </p>
       </div>
 
@@ -181,28 +60,109 @@ export default function UseCasesPage() {
         ))}
       </div>
 
+      {/* Audience Atlas */}
+      <section className="mb-16">
+        <div className="mb-6 flex items-start gap-3">
+          <div className="rounded-md bg-slate-100 p-2">
+            <LayoutGrid className="h-5 w-5 text-slate-600" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">Audience Atlas</h2>
+            <p className="text-sm text-muted-foreground">
+              All {AUDIENCE_ATLAS.length} audiences in one view — trigger, surfaces fired,
+              and the fastest way to activate each during a demo.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {AUDIENCE_ATLAS.map((row) => (
+            <div
+              key={row.id}
+              className="flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-4"
+            >
+              <div className="flex items-start gap-2">
+                <span
+                  className={`mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full ${row.color}`}
+                  aria-hidden
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-slate-900">{row.name}</p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{row.trigger}</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {row.surfaces.length === 0 ? (
+                  <span className="text-[10px] text-slate-400">— no UI surface</span>
+                ) : (
+                  row.surfaces.map((surface) => (
+                    <span
+                      key={surface}
+                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${SURFACE_BADGE_STYLES[surface]}`}
+                    >
+                      {surface}
+                    </span>
+                  ))
+                )}
+              </div>
+              <p className="text-[11px] text-slate-500">
+                <span className="font-medium text-slate-600">Activate:</span>{" "}
+                {row.persona}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Story Cards */}
-      <div className="space-y-8">
-        {stories.map((story, idx) => (
+      <section className="space-y-8">
+        <div className="flex items-start gap-3">
+          <div className="rounded-md bg-slate-100 p-2">
+            <Play className="h-5 w-5 text-slate-600" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-900">Flow Stories</h2>
+            <p className="text-sm text-muted-foreground">
+              {STORIES.length} customer-moment narratives, each with a live
+              repro checklist an SE can run end-to-end.
+            </p>
+          </div>
+        </div>
+
+        {STORIES.map((story, idx) => (
           <article
             key={story.id}
             className={`overflow-hidden rounded-xl border ${story.borderColor} bg-white shadow-sm`}
           >
             {/* Card Header */}
-            <div className={`flex items-center gap-4 ${story.bgColor} px-6 py-5`}>
-              <div className={`rounded-lg bg-white p-2.5 shadow-sm`}>
+            <div className={`flex items-start gap-4 ${story.bgColor} px-6 py-5`}>
+              <div className="rounded-lg bg-white p-2.5 shadow-sm">
                 <story.icon className={`h-6 w-6 ${story.color}`} />
               </div>
               <div className="flex-1">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold text-slate-900">
-                    {idx + 1}. {story.title}
-                  </h2>
-                </div>
+                <h3 className="text-xl font-bold text-slate-900">
+                  {idx + 1}. {story.title}
+                </h3>
                 <p className="mt-0.5 text-sm text-slate-600">
                   Persona: <span className="font-medium">{story.persona}</span>{" "}
                   — {story.personaDetail}
                 </p>
+                {story.audienceIds.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {story.audienceIds.map((id) => (
+                      <span
+                        key={id}
+                        className="inline-flex items-center gap-1 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-medium text-slate-700"
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${colorById(id)}`}
+                          aria-hidden
+                        />
+                        {nameById(id)}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -217,10 +177,10 @@ export default function UseCasesPage() {
 
               {/* What You See */}
               <div>
-                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
                   <Eye className="h-4 w-4" />
                   What You&apos;ll See
-                </h3>
+                </h4>
                 <ul className="space-y-2">
                   {story.whatYouSee.map((item, i) => (
                     <li
@@ -236,10 +196,10 @@ export default function UseCasesPage() {
 
               {/* How Segment Powers It */}
               <div>
-                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
                   <BarChart3 className="h-4 w-4" />
                   How Segment Powers It
-                </h3>
+                </h4>
                 <ul className="space-y-2">
                   {story.howSegmentPowers.map((item, i) => (
                     <li
@@ -255,10 +215,10 @@ export default function UseCasesPage() {
 
               {/* Business Impact */}
               <div>
-                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
                   <TrendingUp className="h-4 w-4" />
                   Business Impact
-                </h3>
+                </h4>
                 <p className="text-sm leading-relaxed text-slate-700">
                   {story.businessImpact}
                 </p>
@@ -271,9 +231,27 @@ export default function UseCasesPage() {
                 </Link>
               </div>
             </div>
+
+            {/* Try It */}
+            <div className="border-t border-slate-100 bg-slate-50 px-6 py-5">
+              <h4 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+                <Play className="h-4 w-4" />
+                Try It
+              </h4>
+              <ol className="space-y-2">
+                {story.tryIt.map((step, i) => (
+                  <li key={i} className="flex gap-3 text-sm leading-relaxed text-slate-700">
+                    <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-slate-700 shadow-sm ring-1 ring-slate-200">
+                      {i + 1}
+                    </span>
+                    <span className="pt-0.5">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </article>
         ))}
-      </div>
+      </section>
 
       {/* Footer CTA */}
       <div className="mt-16 rounded-xl bg-[var(--dominos-dark-blue)] px-8 py-10 text-center text-white">
