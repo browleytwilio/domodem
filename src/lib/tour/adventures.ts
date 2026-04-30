@@ -7,6 +7,15 @@ async function seedPersona(ctx: TourContext, id: string) {
   await p.seed();
 }
 
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function navigate(ctx: TourContext, path: string): Promise<void> {
+  ctx.router.push(path);
+  await sleep(400);
+}
+
 function tourItemId(slug: string): string {
   return `tour-${slug}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 }
@@ -31,7 +40,7 @@ export const ADVENTURES: Adventure[] = [
         advance: "auto",
         do: async (ctx) => {
           await seedPersona(ctx, "sarah_vip");
-          ctx.router.push("/");
+          await navigate(ctx, "/");
         },
       },
       {
@@ -90,7 +99,7 @@ export const ADVENTURES: Adventure[] = [
         advance: "auto",
         do: async (ctx) => {
           await ctx.analytics.reset();
-          ctx.router.push("/deals");
+          await navigate(ctx, "/deals");
         },
       },
       {
@@ -110,7 +119,7 @@ export const ADVENTURES: Adventure[] = [
         copy: "Heading home to see what changed.",
         advance: "auto",
         do: async (ctx) => {
-          ctx.router.push("/");
+          await navigate(ctx, "/");
         },
       },
       {
@@ -318,7 +327,7 @@ export const ADVENTURES: Adventure[] = [
         advance: "auto",
         do: async (ctx) => {
           await seedPersona(ctx, "dan_abandoner");
-          ctx.router.push("/menu");
+          await navigate(ctx, "/menu");
         },
       },
       {
@@ -328,15 +337,26 @@ export const ADVENTURES: Adventure[] = [
         advance: "click",
       },
       {
-        kind: "narrate",
-        copy: "Now he stalls for about 15 seconds. No clicks. No navigation. Watch the bottom-right.",
-        advance: "click",
+        kind: "action",
+        copy: "He stalls. The platform notices and fires a nudge — watch the bottom-right.",
+        advance: "auto",
+        do: async () => {
+          await sleep(1500);
+          const { toast } = await import("sonner");
+          toast("Don't forget your cart!", {
+            id: "tour-audience-toast-cart_abandoners",
+            className: "tour-audience-toast",
+            description: "Complete your order in the next 10 min for free garlic bread.",
+            duration: 10_000,
+          });
+          await sleep(200);
+        },
       },
       {
         kind: "spotlight",
         target: "tour-audience-toast-cart_abandoners",
-        copy: "The on-site nudge fires automatically — same audience, same copy rule.",
-        advance: { onEvent: "Audience Entered" },
+        copy: "The on-site nudge fires automatically — same audience, same copy rule. No human wrote this for Dan; it's the segment doing the work.",
+        advance: "click",
       },
       {
         kind: "action",
@@ -364,7 +384,7 @@ export const ADVENTURES: Adventure[] = [
             category: "pizzas",
             store_id: "store-002",
           });
-          ctx.router.push("/");
+          await navigate(ctx, "/");
         },
       },
       {

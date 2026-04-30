@@ -80,7 +80,14 @@ export function SpotlightOverlay({
   }, [target]);
 
   if (!mounted) return null;
-  if (!rect) return null;
+  if (!rect) {
+    // Target not yet in the DOM (e.g., route transition still settling).
+    // Render a dim backdrop so the narrator panel still reads clearly.
+    return createPortal(
+      <div className="pointer-events-none fixed inset-0 z-[60] bg-black/40" />,
+      document.body,
+    );
+  }
 
   const pad = 12;
   const boxTop = rect.top - pad;
