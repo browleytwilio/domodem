@@ -47,16 +47,17 @@ export const useTourStore = create<TourState>()(
       exit: (opts) =>
         set((s) => {
           const id = s.active;
-          const markComplete = opts?.markComplete && id !== null;
+          const markComplete = opts?.markComplete === true && id !== null;
+          const nextCompleted =
+            markComplete && !s.completed.includes(id)
+              ? [...s.completed, id]
+              : s.completed;
           return {
             active: null,
             beatIndex: 0,
             dismissed: !markComplete,
             startedAt: null,
-            completed:
-              markComplete && id && !s.completed.includes(id)
-                ? [...s.completed, id]
-                : s.completed,
+            completed: nextCompleted,
           };
         }),
 
