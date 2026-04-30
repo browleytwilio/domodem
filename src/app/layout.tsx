@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AnalyticsProvider } from "@/components/analytics-provider";
 import { SegmentProvider } from "@/components/segment/segment-provider";
 import { ScrollRestoration } from "@/components/layout/scroll-restoration";
+import { TourProvider } from "@/components/tour/tour-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -62,7 +63,10 @@ export default function RootLayout({
         <ScrollRestoration />
         <TooltipProvider>
           <AnalyticsProvider>
-            <SegmentProvider>{children}</SegmentProvider>
+            <SegmentProvider>
+              {children}
+              <TourProvider />
+            </SegmentProvider>
           </AnalyticsProvider>
         </TooltipProvider>
         <Toaster />
