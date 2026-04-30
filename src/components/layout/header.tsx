@@ -19,6 +19,7 @@ import { useCartStore } from "@/stores/cart-store";
 import { useUIStore } from "@/stores/ui-store";
 import { useIsHydrated } from "@/lib/use-is-hydrated";
 import { cn } from "@/lib/utils";
+import { TourResumePill } from "@/components/tour/tour-resume-pill";
 
 const mainNav = [
   { label: "Menu", href: "/menu" },
@@ -174,6 +175,7 @@ export function Header() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-1 sm:gap-2">
+            <TourResumePill />
             <Button
               variant="ghost"
               size="icon"

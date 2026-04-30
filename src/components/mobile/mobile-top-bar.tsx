@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronDown, MapPin, Search, ShoppingBag } from "lucide-react";
 import { useUIStore } from "@/stores/ui-store";
 import { useCartStore } from "@/stores/cart-store";
+import { TourResumePill } from "@/components/tour/tour-resume-pill";
 
 export function MobileTopBar() {
   const deliveryMethod = useUIStore((s) => s.deliveryMethod);
@@ -24,6 +25,7 @@ export function MobileTopBar() {
         <ChevronDown className="h-3 w-3 text-muted-foreground" />
       </Link>
       <div className="flex items-center gap-1">
+        <TourResumePill />
         <Link
           href="/m/menu"
           aria-label="Search menu"
