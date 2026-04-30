@@ -30,7 +30,7 @@ export function MobileProductCard({ product }: { product: Product }) {
     e.stopPropagation();
     const unitPrice = product.prices.single ?? price;
     const item = {
-      id: `${product.slug}-${Date.now()}`,
+      id: `${product.slug}-${crypto.randomUUID()}`,
       productSlug: product.slug,
       productName: product.name,
       category: product.category,

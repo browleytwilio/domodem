@@ -10,12 +10,11 @@ export function MobileOrders() {
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const signedInUserId = session?.user?.id ?? null;
+
   useEffect(() => {
     if (isPending) return;
-    if (!session?.user) {
-      setOrders([]);
-      return;
-    }
+    if (!signedInUserId) return;
     let cancelled = false;
     (async () => {
       try {
@@ -30,7 +29,7 @@ export function MobileOrders() {
     return () => {
       cancelled = true;
     };
-  }, [session, isPending]);
+  }, [signedInUserId, isPending]);
 
   if (!isPending && !session?.user) {
     return (
