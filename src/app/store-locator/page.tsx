@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { Suspense, useState, useCallback } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
@@ -48,7 +49,10 @@ const allStores: Store[] = storesData as Store[];
 // ---------------------------------------------------------------------------
 // Page component
 // ---------------------------------------------------------------------------
-export default function StoreLocatorPage() {
+function StoreLocatorInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q") ?? "";
   const [filteredStores, setFilteredStores] = useState<Store[]>(allStores);
   const [searchCoords, setSearchCoords] = useState<{
     lat: number;
@@ -56,10 +60,19 @@ export default function StoreLocatorPage() {
   } | null>(null);
   const { selectedStore, setSelectedStore, deliveryMethod } = useUIStore();
 
+  function updateUrlQuery(q: string) {
+    const next = new URLSearchParams(searchParams.toString());
+    if (q) next.set("q", q);
+    else next.delete("q");
+    const qs = next.toString();
+    router.replace(qs ? `/store-locator?${qs}` : "/store-locator", { scroll: false });
+  }
+
   // -----------------------------------------------------------------------
   // Search handler — filter stores by name, suburb, state, or postcode
   // -----------------------------------------------------------------------
   const handleSearch = useCallback((query: string) => {
+    updateUrlQuery(query);
     const q = query.toLowerCase();
     const matched = allStores.filter(
       (s) =>
@@ -104,6 +117,7 @@ export default function StoreLocatorPage() {
         description: `We couldn't find any stores matching "${query}".`,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // -----------------------------------------------------------------------
@@ -222,6 +236,7 @@ export default function StoreLocatorPage() {
             <StoreSearch
               onSearch={handleSearch}
               onUseLocation={handleUseLocation}
+              initialQuery={initialQuery}
             />
           </div>
           <div className="flex justify-center sm:justify-end">
@@ -230,9 +245,9 @@ export default function StoreLocatorPage() {
         </div>
 
         {/* Results: map + store list */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-[1fr_1fr] md:gap-8 lg:grid-cols-2">
           {/* Map (left on desktop, top on mobile) */}
-          <div className="h-[400px] lg:h-auto lg:min-h-[600px]">
+          <div className="h-[320px] sm:h-[420px] md:sticky md:top-28 md:h-[calc(100vh-8rem)] md:self-start md:min-h-[520px]">
             <StoreMap
               stores={filteredStores}
               selectedStore={selectedStore}
@@ -274,5 +289,13 @@ export default function StoreLocatorPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function StoreLocatorPage() {
+  return (
+    <Suspense fallback={null}>
+      <StoreLocatorInner />
+    </Suspense>
   );
 }

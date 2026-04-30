@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { ProductImage } from "@/components/ui/product-image";
+import { RemoveItemButton } from "@/components/cart/remove-item-button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -95,15 +96,13 @@ export function CartDrawer() {
                         className="rounded-lg"
                       />
                     </div>
-                    <div className="flex flex-1 flex-col">
-                      <div className="flex justify-between">
-                        <h4 className="text-sm font-semibold">{item.productName}</h4>
-                        <button
-                          onClick={() => handleRemove(item)}
-                          className="text-muted-foreground hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <div className="flex items-start justify-between gap-2">
+                        <h4 className="line-clamp-2 min-w-0 text-sm font-semibold">{item.productName}</h4>
+                        <RemoveItemButton
+                          itemName={item.productName}
+                          onConfirm={() => handleRemove(item)}
+                        />
                       </div>
                       {(item.size || item.crust) && (
                         <p className="text-xs text-muted-foreground">
@@ -111,10 +110,12 @@ export function CartDrawer() {
                         </p>
                       )}
                       <div className="mt-2 flex items-center justify-between">
-                        <div className="flex items-center gap-2 rounded-full border">
+                        <div className="flex items-center gap-1 rounded-full border">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-muted"
+                            disabled={item.quantity <= 1}
+                            aria-label="Decrease quantity"
+                            className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dominos-blue)]/40 active:scale-90 disabled:cursor-not-allowed disabled:opacity-40 sm:h-7 sm:w-7"
                           >
                             <Minus className="h-3 w-3" />
                           </button>
@@ -123,7 +124,8 @@ export function CartDrawer() {
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-muted"
+                            aria-label="Increase quantity"
+                            className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dominos-blue)]/40 active:scale-90 sm:h-7 sm:w-7"
                           >
                             <Plus className="h-3 w-3" />
                           </button>
@@ -161,12 +163,12 @@ export function CartDrawer() {
                 </div>
               </div>
               <Button
-                className="mt-4 w-full bg-[var(--dominos-red)] text-base font-bold hover:bg-[var(--dominos-red)]/90"
+                className="mt-4 w-full bg-[var(--dominos-red)] text-base font-bold hover:bg-[var(--dominos-red)]/90 focus-visible:ring-[var(--dominos-red)]/40 active:scale-[0.98]"
                 size="lg"
                 asChild
                 onClick={() => setCartOpen(false)}
               >
-                <Link href="/checkout">Checkout</Link>
+                <Link href="/checkout">Checkout · ${total.toFixed(2)}</Link>
               </Button>
             </div>
           </>

@@ -1,0 +1,177 @@
+[
+  {
+    "slug": "pepperoni",
+    "name": "Pepperoni",
+    "category": "meats",
+    "price": 2.50,
+    "image": "/images/toppings/pepperoni.webp"
+  },
+  {
+    "slug": "ham",
+    "name": "Ham",
+    "category": "meats",
+    "price": 2.50,
+    "image": "/images/toppings/ham.webp"
+  },
+  {
+    "slug": "bacon",
+    "name": "Bacon",
+    "category": "meats",
+    "price": 2.50,
+    "image": "/images/toppings/bacon.webp"
+  },
+  {
+    "slug": "beef",
+    "name": "Beef",
+    "category": "meats",
+    "price": 2.50,
+    "image": "/images/toppings/beef.webp"
+  },
+  {
+    "slug": "chicken",
+    "name": "Seasoned Chicken",
+    "category": "meats",
+    "price": 2.95,
+    "image": "/images/toppings/chicken.webp"
+  },
+  {
+    "slug": "italian-sausage",
+    "name": "Italian Sausage",
+    "category": "meats",
+    "price": 2.50,
+    "image": "/images/toppings/italian-sausage.webp"
+  },
+  {
+    "slug": "prawns",
+    "name": "Prawns",
+    "category": "seafood",
+    "price": 3.50,
+    "image": "/images/toppings/prawns.webp"
+  },
+  {
+    "slug": "anchovies",
+    "name": "Anchovies",
+    "category": "seafood",
+    "price": 2.95,
+    "image": "/images/toppings/anchovies.webp"
+  },
+  {
+    "slug": "mushroom",
+    "name": "Mushroom",
+    "category": "veggies",
+    "price": 1.95,
+    "image": "/images/toppings/mushroom.webp"
+  },
+  {
+    "slug": "onion",
+    "name": "Onion",
+    "category": "veggies",
+    "price": 1.50,
+    "image": "/images/toppings/onion.webp"
+  },
+  {
+    "slug": "capsicum",
+    "name": "Capsicum",
+    "category": "veggies",
+    "price": 1.50,
+    "image": "/images/toppings/capsicum.webp"
+  },
+  {
+    "slug": "pineapple",
+    "name": "Pineapple",
+    "category": "veggies",
+    "price": 1.50,
+    "image": "/images/toppings/pineapple.webp"
+  },
+  {
+    "slug": "olives",
+    "name": "Olives",
+    "category": "veggies",
+    "price": 1.95,
+    "image": "/images/toppings/olives.webp"
+  },
+  {
+    "slug": "jalapenos",
+    "name": "Jalapenos",
+    "category": "veggies",
+    "price": 1.95,
+    "image": "/images/toppings/jalapenos.webp"
+  },
+  {
+    "slug": "spinach",
+    "name": "Baby Spinach",
+    "category": "veggies",
+    "price": 1.50,
+    "image": "/images/toppings/spinach.webp"
+  },
+  {
+    "slug": "tomato",
+    "name": "Fresh Tomato",
+    "category": "veggies",
+    "price": 1.50,
+    "image": "/images/toppings/tomato.webp"
+  },
+  {
+    "slug": "roasted-garlic",
+    "name": "Roasted Garlic",
+    "category": "veggies",
+    "price": 1.50,
+    "image": "/images/toppings/roasted-garlic.webp"
+  },
+  {
+    "slug": "mozzarella",
+    "name": "Mozzarella",
+    "category": "cheese",
+    "price": 1.95,
+    "image": "/images/toppings/mozzarella.webp"
+  },
+  {
+    "slug": "parmesan",
+    "name": "Parmesan",
+    "category": "cheese",
+    "price": 1.95,
+    "image": "/images/toppings/parmesan.webp"
+  },
+  {
+    "slug": "feta",
+    "name": "Feta",
+    "category": "cheese",
+    "price": 2.50,
+    "image": "/images/toppings/feta.webp"
+  },
+  {
+    "slug": "cheddar",
+    "name": "Cheddar",
+    "category": "cheese",
+    "price": 1.95,
+    "image": "/images/toppings/cheddar.webp"
+  },
+  {
+    "slug": "tomato-sauce",
+    "name": "Tomato Sauce Base",
+    "category": "sauces",
+    "price": 0.00,
+    "image": "/images/toppings/tomato-sauce.webp"
+  },
+  {
+    "slug": "bbq-sauce",
+    "name": "BBQ Sauce Base",
+    "category": "sauces",
+    "price": 0.00,
+    "image": "/images/toppings/bbq-sauce.webp"
+  },
+  {
+    "slug": "garlic-aioli",
+    "name": "Garlic Aioli Base",
+    "category": "sauces",
+    "price": 0.00,
+    "image": "/images/toppings/garlic-aioli.webp"
+  },
+  {
+    "slug": "peri-peri",
+    "name": "Peri Peri Sauce Base",
+    "category": "sauces",
+    "price": 0.00,
+    "image": "/images/toppings/peri-peri.webp"
+  }
+]

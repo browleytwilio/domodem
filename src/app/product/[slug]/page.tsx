@@ -18,6 +18,7 @@ import { BuilderSummary } from "@/components/pizza-builder/builder-summary";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart-store";
+import { useUIStore } from "@/stores/ui-store";
 import {
   trackPizzaBuilderOpened,
   trackPizzaSizeSelected,
@@ -143,6 +144,7 @@ export default function ProductPage({
   // Must always call all hooks in the same order, so these are called
   // unconditionally. We redirect below if product is missing.
   const addItem = useCartStore((s) => s.addItem);
+  const setCartOpen = useUIStore((s) => s.setCartOpen);
 
   const [size, setSize] = useState<PizzaSize>("large");
   const [crust, setCrust] = useState<CrustType>("classic");
@@ -292,7 +294,8 @@ export default function ProductPage({
     toast.success(`${product.name} added to cart`, {
       description: `${quantity}x ${size} with ${crust.replace("-", " ")} crust`,
     });
-  }, [product, size, crust, sauce, selectedToppings, quantity, totalPrice, addItem]);
+    setCartOpen(true);
+  }, [product, size, crust, sauce, selectedToppings, quantity, totalPrice, addItem, setCartOpen]);
 
   // Handle unknown product after hooks
   if (!product) {
@@ -421,6 +424,7 @@ export default function ProductPage({
                     unitPrice: product.prices.single ?? 0,
                   });
                   toast.success(`${product.name} added to cart`);
+                  setCartOpen(true);
                 }}
               >
                 Add to Cart

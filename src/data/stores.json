@@ -1,0 +1,452 @@
+[
+  {
+    "id": "store-001",
+    "name": "Domino's Sydney CBD",
+    "address": "123 George St",
+    "suburb": "Sydney",
+    "state": "NSW",
+    "postcode": "2000",
+    "phone": "02 9267 1234",
+    "lat": -33.8688,
+    "lng": 151.2093,
+    "hours": {
+      "mon-thu": "10:00-23:00",
+      "fri-sat": "10:00-00:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-001.webp"
+  },
+  {
+    "id": "store-002",
+    "name": "Domino's Bondi",
+    "address": "78 Campbell Pde",
+    "suburb": "Bondi Beach",
+    "state": "NSW",
+    "postcode": "2026",
+    "phone": "02 9130 5678",
+    "lat": -33.8908,
+    "lng": 151.2743,
+    "hours": {
+      "mon-thu": "10:30-23:00",
+      "fri-sat": "10:30-00:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 4,
+    "image": "/images/stores/store-002.webp"
+  },
+  {
+    "id": "store-003",
+    "name": "Domino's Parramatta",
+    "address": "215 Church St",
+    "suburb": "Parramatta",
+    "state": "NSW",
+    "postcode": "2150",
+    "phone": "02 9635 9012",
+    "lat": -33.8151,
+    "lng": 151.0011,
+    "hours": {
+      "mon-thu": "10:00-23:00",
+      "fri-sat": "10:00-00:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 6,
+    "image": "/images/stores/store-003.webp"
+  },
+  {
+    "id": "store-004",
+    "name": "Domino's Newtown",
+    "address": "302 King St",
+    "suburb": "Newtown",
+    "state": "NSW",
+    "postcode": "2042",
+    "phone": "02 9519 3456",
+    "lat": -33.8977,
+    "lng": 151.1792,
+    "hours": {
+      "mon-thu": "10:30-23:30",
+      "fri-sat": "10:30-01:00",
+      "sun": "11:00-22:30"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 4,
+    "image": "/images/stores/store-004.webp"
+  },
+  {
+    "id": "store-005",
+    "name": "Domino's Chatswood",
+    "address": "436 Victoria Ave",
+    "suburb": "Chatswood",
+    "state": "NSW",
+    "postcode": "2067",
+    "phone": "02 9411 7890",
+    "lat": -33.7969,
+    "lng": 151.1832,
+    "hours": {
+      "mon-thu": "10:00-22:30",
+      "fri-sat": "10:00-23:30",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-005.webp"
+  },
+  {
+    "id": "store-006",
+    "name": "Domino's Melbourne CBD",
+    "address": "189 Swanston St",
+    "suburb": "Melbourne",
+    "state": "VIC",
+    "postcode": "3000",
+    "phone": "03 9654 2345",
+    "lat": -37.8136,
+    "lng": 144.9631,
+    "hours": {
+      "mon-thu": "10:00-23:00",
+      "fri-sat": "10:00-01:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-006.webp"
+  },
+  {
+    "id": "store-007",
+    "name": "Domino's St Kilda",
+    "address": "94 Acland St",
+    "suburb": "St Kilda",
+    "state": "VIC",
+    "postcode": "3182",
+    "phone": "03 9534 6789",
+    "lat": -37.8676,
+    "lng": 144.9809,
+    "hours": {
+      "mon-thu": "10:30-23:30",
+      "fri-sat": "10:30-01:00",
+      "sun": "11:00-23:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 4,
+    "image": "/images/stores/store-007.webp"
+  },
+  {
+    "id": "store-008",
+    "name": "Domino's Richmond",
+    "address": "267 Bridge Rd",
+    "suburb": "Richmond",
+    "state": "VIC",
+    "postcode": "3121",
+    "phone": "03 9428 0123",
+    "lat": -37.8183,
+    "lng": 145.002,
+    "hours": {
+      "mon-thu": "10:00-22:30",
+      "fri-sat": "10:00-23:30",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-008.webp"
+  },
+  {
+    "id": "store-009",
+    "name": "Domino's Carlton",
+    "address": "158 Lygon St",
+    "suburb": "Carlton",
+    "state": "VIC",
+    "postcode": "3053",
+    "phone": "03 9347 4567",
+    "lat": -37.7996,
+    "lng": 144.9667,
+    "hours": {
+      "mon-thu": "10:30-23:00",
+      "fri-sat": "10:30-00:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 4,
+    "image": "/images/stores/store-009.webp"
+  },
+  {
+    "id": "store-010",
+    "name": "Domino's Brisbane CBD",
+    "address": "145 Adelaide St",
+    "suburb": "Brisbane City",
+    "state": "QLD",
+    "postcode": "4000",
+    "phone": "07 3229 8901",
+    "lat": -27.4698,
+    "lng": 153.0251,
+    "hours": {
+      "mon-thu": "10:00-23:00",
+      "fri-sat": "10:00-00:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-010.webp"
+  },
+  {
+    "id": "store-011",
+    "name": "Domino's South Bank",
+    "address": "32 Grey St",
+    "suburb": "South Brisbane",
+    "state": "QLD",
+    "postcode": "4101",
+    "phone": "07 3846 2345",
+    "lat": -27.4783,
+    "lng": 153.0178,
+    "hours": {
+      "mon-thu": "10:30-23:00",
+      "fri-sat": "10:30-00:00",
+      "sun": "11:00-22:30"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-011.webp"
+  },
+  {
+    "id": "store-012",
+    "name": "Domino's Fortitude Valley",
+    "address": "710 Ann St",
+    "suburb": "Fortitude Valley",
+    "state": "QLD",
+    "postcode": "4006",
+    "phone": "07 3252 6789",
+    "lat": -27.457,
+    "lng": 153.0357,
+    "hours": {
+      "mon-thu": "10:30-23:30",
+      "fri-sat": "10:30-02:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 4,
+    "image": "/images/stores/store-012.webp"
+  },
+  {
+    "id": "store-013",
+    "name": "Domino's Perth CBD",
+    "address": "87 Barrack St",
+    "suburb": "Perth",
+    "state": "WA",
+    "postcode": "6000",
+    "phone": "08 9221 0123",
+    "lat": -31.9505,
+    "lng": 115.8605,
+    "hours": {
+      "mon-thu": "10:00-22:30",
+      "fri-sat": "10:00-23:30",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 6,
+    "image": "/images/stores/store-013.webp"
+  },
+  {
+    "id": "store-014",
+    "name": "Domino's Fremantle",
+    "address": "54 Market St",
+    "suburb": "Fremantle",
+    "state": "WA",
+    "postcode": "6160",
+    "phone": "08 9335 4567",
+    "lat": -32.0569,
+    "lng": 115.7439,
+    "hours": {
+      "mon-thu": "10:30-22:30",
+      "fri-sat": "10:30-23:30",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-014.webp"
+  },
+  {
+    "id": "store-015",
+    "name": "Domino's Adelaide CBD",
+    "address": "203 Rundle St",
+    "suburb": "Adelaide",
+    "state": "SA",
+    "postcode": "5000",
+    "phone": "08 8223 8901",
+    "lat": -34.9285,
+    "lng": 138.6007,
+    "hours": {
+      "mon-thu": "10:00-22:30",
+      "fri-sat": "10:00-23:30",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 6,
+    "image": "/images/stores/store-015.webp"
+  },
+  {
+    "id": "store-016",
+    "name": "Domino's Glenelg",
+    "address": "118 Jetty Rd",
+    "suburb": "Glenelg",
+    "state": "SA",
+    "postcode": "5045",
+    "phone": "08 8295 2345",
+    "lat": -34.9811,
+    "lng": 138.5156,
+    "hours": {
+      "mon-thu": "10:30-22:30",
+      "fri-sat": "10:30-23:30",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-016.webp"
+  },
+  {
+    "id": "store-017",
+    "name": "Domino's Surfers Paradise",
+    "address": "65 Cavill Ave",
+    "suburb": "Surfers Paradise",
+    "state": "QLD",
+    "postcode": "4217",
+    "phone": "07 5538 6789",
+    "lat": -28.0027,
+    "lng": 153.43,
+    "hours": {
+      "mon-thu": "10:00-23:00",
+      "fri-sat": "10:00-01:00",
+      "sun": "11:00-22:30"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-017.webp"
+  },
+  {
+    "id": "store-018",
+    "name": "Domino's Broadbeach",
+    "address": "22 Albert Ave",
+    "suburb": "Broadbeach",
+    "state": "QLD",
+    "postcode": "4218",
+    "phone": "07 5592 0123",
+    "lat": -28.0267,
+    "lng": 153.4312,
+    "hours": {
+      "mon-thu": "10:30-22:30",
+      "fri-sat": "10:30-00:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-018.webp"
+  },
+  {
+    "id": "store-019",
+    "name": "Domino's Canberra City",
+    "address": "47 Bunda St",
+    "suburb": "Canberra",
+    "state": "ACT",
+    "postcode": "2601",
+    "phone": "02 6247 4567",
+    "lat": -35.2809,
+    "lng": 149.13,
+    "hours": {
+      "mon-thu": "10:00-22:30",
+      "fri-sat": "10:00-23:00",
+      "sun": "11:00-22:00"
+    },
+    "features": [
+      "delivery",
+      "pickup",
+      "dine-in"
+    ],
+    "deliveryRadius": 6,
+    "image": "/images/stores/store-019.webp"
+  },
+  {
+    "id": "store-020",
+    "name": "Domino's Hobart CBD",
+    "address": "112 Liverpool St",
+    "suburb": "Hobart",
+    "state": "TAS",
+    "postcode": "7000",
+    "phone": "03 6231 8901",
+    "lat": -42.8821,
+    "lng": 147.3272,
+    "hours": {
+      "mon-thu": "10:30-22:00",
+      "fri-sat": "10:30-23:00",
+      "sun": "11:00-21:30"
+    },
+    "features": [
+      "delivery",
+      "pickup"
+    ],
+    "deliveryRadius": 5,
+    "image": "/images/stores/store-020.webp"
+  }
+]

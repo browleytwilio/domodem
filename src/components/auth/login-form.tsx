@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,16 +11,31 @@ import { authClient } from "@/lib/auth-client";
 import { trackSignedIn, trackAlias } from "@/lib/analytics/events";
 import { Loader2 } from "lucide-react";
 
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
 export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  function handleEmailBlur() {
+    if (!email) return;
+    setEmailError(isValidEmail(email) ? null : "Please enter a valid email address.");
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+    setEmailError(null);
     setLoading(true);
 
     try {
@@ -43,9 +59,14 @@ export function LoginForm() {
           // alias is best-effort; don't block login
         }
       }
+      toast.success("Welcome back!");
       router.push("/menu");
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (err) {
+      const msg =
+        err instanceof TypeError
+          ? "Connection issue — check your network."
+          : "Something went wrong. Please try again.";
+      setError(msg);
       setLoading(false);
     }
   }
@@ -59,11 +80,24 @@ export function LoginForm() {
           type="email"
           placeholder="you@example.com"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (emailError) setEmailError(null);
+          }}
+          onBlur={handleEmailBlur}
           required
           autoComplete="email"
+          inputMode="email"
           disabled={loading}
+          aria-invalid={Boolean(emailError)}
+          aria-describedby={emailError ? "email-error" : undefined}
+          className={emailError ? "border-destructive focus-visible:ring-destructive/40" : undefined}
         />
+        {emailError && (
+          <p id="email-error" role="alert" className="text-xs text-destructive">
+            {emailError}
+          </p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -81,7 +115,7 @@ export function LoginForm() {
       </div>
 
       {error && (
-        <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div role="alert" className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {error}
         </div>
       )}

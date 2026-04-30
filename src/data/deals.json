@@ -1,0 +1,112 @@
+[
+  {
+    "id": "deal-001",
+    "name": "Value Range Pickup",
+    "description": "Any Value Range pizza from $5.99* pickup. Choose from Pepperoni, Hawaiian, Margherita and more",
+    "price": 5.99,
+    "originalPrice": 9.99,
+    "image": "/images/deals/value-range.webp",
+    "products": ["pepperoni", "hawaiian", "margherita"],
+    "badge": "Best Seller",
+    "code": "VALUE599"
+  },
+  {
+    "id": "deal-002",
+    "name": "Traditional Range 3 Pack",
+    "description": "Pick up any 3 Traditional Range pizzas for $29.95*. Mix and match your favourites",
+    "price": 29.95,
+    "originalPrice": 50.97,
+    "image": "/images/deals/traditional-3-pack.webp",
+    "products": ["bbq-chicken", "supreme", "meat-lovers", "vegorama", "chicken-bacon-deluxe"],
+    "badge": "Popular",
+    "code": "TRAD3PACK"
+  },
+  {
+    "id": "deal-003",
+    "name": "Mega Deal",
+    "description": "3 large Traditional pizzas + 2 sides + 1.25L drink. Feed the whole crew for less",
+    "price": 39.95,
+    "originalPrice": 68.87,
+    "image": "/images/deals/mega-deal.webp",
+    "products": ["bbq-chicken", "meat-lovers", "supreme", "garlic-bread", "cheesy-garlic-bread", "coca-cola-1.25l"],
+    "badge": "Best Value",
+    "code": "MEGA3995"
+  },
+  {
+    "id": "deal-004",
+    "name": "Date Night",
+    "description": "2 large Traditional pizzas + garlic bread + 1.25L drink. Perfect for a cosy night in",
+    "price": 29.95,
+    "originalPrice": 44.47,
+    "image": "/images/deals/date-night.webp",
+    "products": ["bbq-chicken", "pepperoni", "garlic-bread", "coca-cola-1.25l"],
+    "badge": null,
+    "code": "DATENIGHT"
+  },
+  {
+    "id": "deal-005",
+    "name": "Lunch Combo",
+    "description": "Any personal pizza + a side + 600ml drink for $12.95*. Available 11am-4pm",
+    "price": 12.95,
+    "originalPrice": 19.93,
+    "image": "/images/deals/lunch-combo.webp",
+    "products": ["pepperoni", "hawaiian", "margherita", "oven-baked-chips", "water-600ml"],
+    "badge": "Lunch Only",
+    "code": "LUNCH1295"
+  },
+  {
+    "id": "deal-006",
+    "name": "VIP Exclusive",
+    "description": "Any 3 large Premium pizzas for $35.95*. Exclusively for Domino's VIP members",
+    "price": 35.95,
+    "originalPrice": 65.97,
+    "image": "/images/deals/vip-exclusive.webp",
+    "products": ["chicken-bacon-deluxe", "the-lot", "godfather", "new-yorker", "garlic-prawn"],
+    "badge": "VIP Only",
+    "code": "VIP3595"
+  },
+  {
+    "id": "deal-007",
+    "name": "Family Feast",
+    "description": "4 large pizzas + 2 sides + 2 x 1.25L drinks. The ultimate family spread for movie night",
+    "price": 54.95,
+    "originalPrice": 89.86,
+    "image": "/images/deals/family-feast.webp",
+    "products": ["pepperoni", "hawaiian", "meat-lovers", "margherita", "garlic-bread", "cheesy-garlic-bread", "coca-cola-1.25l", "sprite-1.25l"],
+    "badge": "Family Favourite",
+    "code": "FAMILY5495"
+  },
+  {
+    "id": "deal-008",
+    "name": "Super Saver",
+    "description": "2 Value Range pizzas + garlic bread + 1.25L drink from $19.95* pickup",
+    "price": 19.95,
+    "originalPrice": 33.47,
+    "image": "/images/deals/super-saver.webp",
+    "products": ["pepperoni", "hawaiian", "margherita", "garlic-bread", "coca-cola-1.25l"],
+    "badge": null,
+    "code": "SAVER1995"
+  },
+  {
+    "id": "deal-009",
+    "name": "Student Special",
+    "description": "Any large Value Range pizza + garlic bread + 600ml drink for $14.95*. Show your student ID",
+    "price": 14.95,
+    "originalPrice": 23.48,
+    "image": "/images/deals/student-special.webp",
+    "products": ["pepperoni", "hawaiian", "margherita", "garlic-bread", "water-600ml"],
+    "badge": "Students",
+    "code": "STUDENT1495"
+  },
+  {
+    "id": "deal-010",
+    "name": "Free Delivery Over $30",
+    "description": "Spend $30 or more and get free delivery to your door. No code needed, applied automatically at checkout",
+    "price": 0,
+    "originalPrice": 7.95,
+    "image": "/images/deals/free-delivery.webp",
+    "products": [],
+    "badge": "Free Delivery",
+    "code": "FREEDEL30"
+  }
+]

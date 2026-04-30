@@ -7,7 +7,6 @@ import {
   ClipboardList,
   MapPin,
   Crown,
-  Settings,
   LogOut,
 } from "lucide-react";
 import { Header } from "@/components/layout/header";
@@ -43,12 +42,6 @@ const accountCards = [
     description: "Check your points, tier and available rewards.",
     href: "/account/loyalty",
     icon: Crown,
-  },
-  {
-    title: "Account Settings",
-    description: "Update your name, email and password.",
-    href: "/account/settings",
-    icon: Settings,
   },
 ];
 

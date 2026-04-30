@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { EventRow } from "./event-row";
 import { EventDetail } from "./event-detail";
 import { useSegmentStore } from "@/stores/segment-store";
+import { cn } from "@/lib/utils";
 import type { EventKind, LoggedEvent } from "@/lib/segment/types";
 
 const KIND_OPTIONS: { value: EventKind | "all"; label: string }[] = [
@@ -51,7 +52,12 @@ export function EventStream() {
   return (
     <div className="grid h-full grid-cols-1 @3xl/inspector:grid-cols-[360px_1fr]">
       {/* Left: list + filters */}
-      <div className="flex h-full min-h-0 flex-col border-r">
+      <div
+        className={cn(
+          "flex h-full min-h-0 flex-col border-r",
+          selected && "hidden @3xl/inspector:flex"
+        )}
+      >
         <div className="flex flex-col gap-2 border-b p-3">
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
@@ -126,8 +132,13 @@ export function EventStream() {
       </div>
 
       {/* Right: detail */}
-      <div className="min-h-0 bg-muted/20">
-        <EventDetail event={selected} />
+      <div
+        className={cn(
+          "min-h-0 bg-muted/20",
+          !selected && "hidden @3xl/inspector:block"
+        )}
+      >
+        <EventDetail event={selected} onBack={() => setSelected(null)} />
       </div>
     </div>
   );

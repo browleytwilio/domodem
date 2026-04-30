@@ -34,11 +34,16 @@ const DEFAULT_COMPUTED: ComputedTraits = {
   has_viewed_deals: false,
 };
 
-const DEFAULT_JOURNEY: JourneyState = {
-  stage: "visitor",
-  enteredAt: new Date().toISOString(),
-  history: [{ stage: "visitor", at: new Date().toISOString() }],
-};
+function makeDefaultJourney(): JourneyState {
+  const now = new Date().toISOString();
+  return {
+    stage: "visitor",
+    enteredAt: now,
+    history: [{ stage: "visitor", at: now }],
+  };
+}
+
+const DEFAULT_JOURNEY: JourneyState = makeDefaultJourney();
 
 interface SegmentState {
   // data
@@ -103,16 +108,11 @@ export const useSegmentStore = create<SegmentState>()(
 
       clear: () => {
         clearEvents();
-        const now = new Date().toISOString();
         set({
           events: [],
           audiences: [],
           computedTraits: DEFAULT_COMPUTED,
-          journey: {
-            stage: "visitor",
-            enteredAt: now,
-            history: [{ stage: "visitor", at: now }],
-          },
+          journey: makeDefaultJourney(),
           traits: {},
         });
       },
@@ -137,7 +137,14 @@ export const useSegmentStore = create<SegmentState>()(
       mergeTraits: (traits) =>
         set((state) => ({ traits: { ...state.traits, ...traits } })),
       resetIdentity: () =>
-        set({ userId: null, anonymousId: null, traits: {} }),
+        set({
+          userId: null,
+          anonymousId: null,
+          traits: {},
+          audiences: [],
+          computedTraits: DEFAULT_COMPUTED,
+          journey: makeDefaultJourney(),
+        }),
 
       setDemoMode: (enabled) => set({ demoModeEnabled: enabled }),
       setInspectorOpen: (inspectorOpen) => set({ inspectorOpen }),
@@ -149,6 +156,12 @@ export const useSegmentStore = create<SegmentState>()(
       partialize: (state) => ({
         demoModeEnabled: state.demoModeEnabled,
         inspectorTab: state.inspectorTab,
+        userId: state.userId,
+        anonymousId: state.anonymousId,
+        traits: state.traits,
+        audiences: state.audiences,
+        computedTraits: state.computedTraits,
+        journey: state.journey,
       }),
     },
   ),

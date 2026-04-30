@@ -66,8 +66,10 @@ const COPY_BY_AUDIENCE: BannerCopy[] = [
 export function PersonalizationBanner() {
   const audiences = useSegmentStore((s) => s.audiences);
   const demoMode = useSegmentStore((s) => s.demoModeEnabled);
-  const memberIds = new Set(audiences.map((a) => a.id));
 
+  if (!demoMode) return null;
+
+  const memberIds = new Set(audiences.map((a) => a.id));
   const match = COPY_BY_AUDIENCE.find((c) => memberIds.has(c.audienceId));
   if (!match) return null;
 
@@ -82,12 +84,10 @@ export function PersonalizationBanner() {
     >
       <div className="mx-auto flex max-w-7xl flex-col items-start gap-3 px-6 py-8 md:flex-row md:items-center md:justify-between md:py-10">
         <div className="flex flex-col gap-1.5 text-white">
-          {demoMode && (
-            <span className="inline-flex w-fit items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm">
-              <Sparkles className="h-3 w-3" />
-              Personalized · {match.badge}
-            </span>
-          )}
+          <span className="inline-flex w-fit items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold backdrop-blur-sm">
+            <Sparkles className="h-3 w-3" />
+            Personalized · {match.badge}
+          </span>
           <h2 className="text-2xl font-black tracking-tight sm:text-3xl">
             {match.headline}
           </h2>

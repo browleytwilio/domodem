@@ -7,7 +7,6 @@ import {
   ShoppingBag,
   Minus,
   Plus,
-  Trash2,
   Tag,
   Truck,
   Store,
@@ -22,12 +21,19 @@ import { toast } from "sonner";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { RemoveItemButton } from "@/components/cart/remove-item-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useCartStore } from "@/stores/cart-store";
 import { useUIStore } from "@/stores/ui-store";
 import { useOrderStore } from "@/stores/order-store";
@@ -74,6 +80,7 @@ export default function CheckoutPage() {
 
   // Local form state
   const [localAddress, setLocalAddress] = useState(deliveryAddress);
+  const [addressError, setAddressError] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [couponInput, setCouponInput] = useState("");
   const [couponError, setCouponError] = useState("");
@@ -169,9 +176,11 @@ export default function CheckoutPage() {
 
   const handlePlaceOrder = useCallback(async () => {
     if (deliveryMethod === "delivery" && !localAddress.trim()) {
+      setAddressError("Please enter a delivery address.");
       toast.error("Please enter a delivery address.");
       return;
     }
+    setAddressError("");
 
     setIsSubmitting(true);
 
@@ -314,7 +323,7 @@ export default function CheckoutPage() {
 
         <h1 className="mb-8 text-3xl font-bold">Checkout</h1>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
+        <div className="grid gap-6 pb-24 md:grid-cols-[1fr_340px] md:gap-8 md:pb-8 lg:grid-cols-[1fr_420px]">
           {/* ---- Left column: form sections ---- */}
           <div className="space-y-8">
             {/* Delivery / Pickup info */}
@@ -350,8 +359,16 @@ export default function CheckoutPage() {
                       placeholder="123 George St, Sydney NSW 2000"
                       value={localAddress}
                       onChange={(e) => setLocalAddress(e.target.value)}
-                      className="h-10"
+                      autoComplete="street-address"
+                      aria-invalid={Boolean(addressError)}
+                      aria-describedby={addressError ? "address-error" : undefined}
+                      className={`h-11 md:h-10 ${addressError ? "border-destructive focus-visible:ring-destructive/40" : ""}`}
                     />
+                    {addressError && (
+                      <p id="address-error" role="alert" className="mt-1.5 text-xs text-destructive">
+                        {addressError}
+                      </p>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -419,7 +436,8 @@ export default function CheckoutPage() {
                   </div>
                   <button
                     onClick={handleRemoveCoupon}
-                    className="text-muted-foreground transition-colors hover:text-destructive"
+                    aria-label="Remove coupon"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive/40 active:scale-90"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -437,18 +455,22 @@ export default function CheckoutPage() {
                       onKeyDown={(e) => {
                         if (e.key === "Enter") handleApplyCoupon();
                       }}
-                      className="h-10 uppercase"
+                      aria-label="Coupon code"
+                      aria-invalid={Boolean(couponError)}
+                      aria-describedby={couponError ? "coupon-error" : undefined}
+                      autoCapitalize="characters"
+                      className={`h-11 uppercase md:h-10 ${couponError ? "border-destructive focus-visible:ring-destructive/40" : ""}`}
                     />
                     <Button
                       onClick={handleApplyCoupon}
                       variant="outline"
-                      className="h-10 px-6 font-semibold"
+                      className="h-11 px-5 font-semibold md:h-10 md:px-6"
                     >
                       Apply
                     </Button>
                   </div>
                   {couponError && (
-                    <p className="mt-2 text-sm text-destructive">
+                    <p id="coupon-error" role="alert" className="mt-2 text-sm text-destructive">
                       {couponError}
                     </p>
                   )}
@@ -460,8 +482,8 @@ export default function CheckoutPage() {
             </section>
           </div>
 
-          {/* ---- Right column: order summary ---- */}
-          <div className="lg:sticky lg:top-36 lg:self-start">
+          {/* ---- Right column: order summary (hidden on mobile, sticky on md+) ---- */}
+          <div className="hidden md:block md:sticky md:top-24 md:self-start">
             <div className="rounded-xl border bg-card shadow-sm">
               <div className="border-b px-6 py-4">
                 <h2 className="flex items-center gap-2 text-lg font-bold">
@@ -493,12 +515,12 @@ export default function CheckoutPage() {
                           <h4 className="text-sm font-semibold leading-tight">
                             {item.productName}
                           </h4>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="ml-2 flex-shrink-0 text-muted-foreground transition-colors hover:text-destructive"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
+                          <RemoveItemButton
+                            itemName={item.productName}
+                            onConfirm={() => removeItem(item.id)}
+                            size="sm"
+                            className="ml-2"
+                          />
                         </div>
                         {(item.size || item.crust) && (
                           <p className="text-xs text-muted-foreground">
@@ -511,7 +533,9 @@ export default function CheckoutPage() {
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity - 1)
                               }
-                              className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-muted"
+                              disabled={item.quantity <= 1}
+                              aria-label="Decrease quantity"
+                              className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dominos-blue)]/40 active:scale-90 disabled:cursor-not-allowed disabled:opacity-40 md:h-6 md:w-6"
                             >
                               <Minus className="h-3 w-3" />
                             </button>
@@ -522,7 +546,8 @@ export default function CheckoutPage() {
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity + 1)
                               }
-                              className="flex h-6 w-6 items-center justify-center rounded-full hover:bg-muted"
+                              aria-label="Increase quantity"
+                              className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dominos-blue)]/40 active:scale-90 md:h-6 md:w-6"
                             >
                               <Plus className="h-3 w-3" />
                             </button>
@@ -572,7 +597,7 @@ export default function CheckoutPage() {
                 <Button
                   onClick={handlePlaceOrder}
                   disabled={isSubmitting}
-                  className="mt-4 h-12 w-full bg-[var(--dominos-red)] text-base font-bold hover:bg-[var(--dominos-red)]/90 disabled:opacity-50"
+                  className="mt-4 h-12 w-full bg-[var(--dominos-red)] text-base font-bold hover:bg-[var(--dominos-red)]/90 focus-visible:ring-[var(--dominos-red)]/40 active:scale-[0.98] disabled:opacity-50"
                   size="lg"
                 >
                   {isSubmitting ? (
@@ -595,6 +620,86 @@ export default function CheckoutPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile bottom bar — shows total + opens a Sheet with the full summary */}
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-background px-4 py-3 shadow-[0_-6px_20px_rgba(0,0,0,0.08)] md:hidden">
+          <div className="flex items-center gap-3">
+            <Sheet>
+              <SheetTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    className="flex-none font-semibold"
+                  />
+                }
+              >
+                <ShoppingBag className="h-4 w-4" />
+                Review
+              </SheetTrigger>
+              <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto p-0">
+                <SheetTitle className="sr-only">Order summary</SheetTitle>
+                <div className="border-b px-6 py-4">
+                  <h2 className="flex items-center gap-2 text-lg font-bold">
+                    <ShoppingBag className="h-5 w-5" />
+                    Order Summary ({items.length} {items.length === 1 ? "item" : "items"})
+                  </h2>
+                </div>
+                <div className="divide-y px-6">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex justify-between py-3 text-sm">
+                      <span className="min-w-0 truncate pr-2">
+                        {item.quantity}× {item.productName}
+                      </span>
+                      <span className="flex-none font-semibold tabular-nums">
+                        ${(item.unitPrice * item.quantity).toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2 border-t px-6 py-4 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="tabular-nums">${subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Delivery Fee</span>
+                    <span className="tabular-nums">
+                      {deliveryFee === 0 ? "FREE" : `$${deliveryFee.toFixed(2)}`}
+                    </span>
+                  </div>
+                  {appliedCoupon && couponDiscount > 0 && (
+                    <div className="flex justify-between text-[var(--dominos-green)]">
+                      <span>Discount ({appliedCoupon})</span>
+                      <span className="tabular-nums">-${couponDiscount.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <Separator />
+                  <div className="flex justify-between text-base font-bold">
+                    <span>Total</span>
+                    <span className="tabular-nums">${total.toFixed(2)}</span>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <Button
+              onClick={handlePlaceOrder}
+              disabled={isSubmitting}
+              className="h-11 flex-1 bg-[var(--dominos-red)] text-sm font-bold text-white hover:bg-[var(--dominos-red)]/90 disabled:opacity-50"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Placing…
+                </span>
+              ) : (
+                <span className="flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  Place order · ${total.toFixed(2)}
+                </span>
+              )}
+            </Button>
           </div>
         </div>
       </main>
