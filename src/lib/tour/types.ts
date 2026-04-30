@@ -28,7 +28,7 @@ export type Beat =
       kind: "action";
       do: (ctx: TourContext) => Promise<void>;
       copy: string;
-      advance: "auto";
+      advance: "click" | "auto";
     }
   | {
       kind: "recap";

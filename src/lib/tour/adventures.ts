@@ -37,7 +37,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Loading Sarah's profile and bringing up her home page…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await seedPersona(ctx, "sarah_vip");
           await navigate(ctx, "/");
@@ -52,7 +52,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "She opens the mobile app…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await navigate(ctx, "/m");
         },
@@ -65,7 +65,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "She walks into a store…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await navigate(ctx, "/kiosk");
         },
@@ -110,7 +110,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Clearing identity and opening the deals page…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await ctx.analytics.reset();
           await navigate(ctx, "/deals");
@@ -119,7 +119,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "They look at the lunch combo…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await ctx.analytics.track("Deal Viewed", {
             deal_id: "deal-005",
@@ -131,7 +131,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Heading home to see what changed.",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await navigate(ctx, "/");
         },
@@ -145,7 +145,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Now they add a pizza to cart, but don't check out…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           const { useCartStore } = await import("@/stores/cart-store");
           useCartStore.getState().addItem({
@@ -204,7 +204,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Setting Sarah up on the menu with an empty cart…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await seedPersona(ctx, "sarah_vip");
           const { useCartStore } = await import("@/stores/cart-store");
@@ -220,7 +220,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Adding Meat Lovers to her cart…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           const { useCartStore } = await import("@/stores/cart-store");
           useCartStore.getState().addItem({
@@ -246,7 +246,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "She leaves the house and opens the mobile app…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await navigate(ctx, "/m/menu");
         },
@@ -259,7 +259,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Adding Garlic Bread on mobile…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           const { useCartStore } = await import("@/stores/cart-store");
           useCartStore.getState().addItem({
@@ -283,7 +283,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "She walks into the store and taps the kiosk…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await navigate(ctx, "/kiosk/menu");
         },
@@ -296,7 +296,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Adding a Coke on the kiosk…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           const { useCartStore } = await import("@/stores/cart-store");
           useCartStore.getState().addItem({
@@ -352,7 +352,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Loading Dan's session and opening the menu…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await seedPersona(ctx, "dan_abandoner");
           await navigate(ctx, "/menu");
@@ -367,7 +367,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "He stalls. The platform notices and fires a nudge — watch the bottom-right.",
-        advance: "auto",
+        advance: "click",
         do: async () => {
           await sleep(1500);
           const { toast } = await import("sonner");
@@ -389,7 +389,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Meanwhile, an email lands in Dan's inbox…",
-        advance: "auto",
+        advance: "click",
         do: async () => {
           window.dispatchEvent(new CustomEvent("tour:open-inbox"));
         },
@@ -402,7 +402,7 @@ export const ADVENTURES: Adventure[] = [
       {
         kind: "action",
         copy: "Dan taps the email and finishes his order…",
-        advance: "auto",
+        advance: "click",
         do: async (ctx) => {
           await ctx.analytics.track("Order Completed", {
             order_id: `tour-order-${Date.now()}`,

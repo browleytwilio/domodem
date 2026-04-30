@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import { useTourStore } from "@/stores/tour-store";
@@ -31,16 +31,27 @@ export function TourProvider() {
   const router = useRouter();
   const runningActionRef = useRef<number>(-1);
   const advanceRef = useRef(advance);
+  const runNextRef = useRef<() => void>(() => {});
   useEffect(() => {
     advanceRef.current = advance;
   }, [advance]);
+  const [runningOnBeat, setRunningOnBeat] = useState<number | null>(null);
+  const handleNextRef = useRef<() => void | Promise<void>>(() => {});
+  useEffect(() => {
+    runNextRef.current = () => {
+      void handleNextRef.current();
+    };
+  }, []);
 
   const adventure = active ? findAdventure(active) : undefined;
   const beat = adventure?.beats[beatIndex];
 
+  const actionRunning = runningOnBeat === beatIndex;
+
   useEffect(() => {
     if (!adventure || !beat) return;
     if (beat.kind !== "action") return;
+    if (beat.advance !== "auto") return;
     if (runningActionRef.current === beatIndex) return;
     runningActionRef.current = beatIndex;
     const ctx = makeTourContext(router, analytics);
@@ -90,40 +101,62 @@ export function TourProvider() {
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
-      if (!adventure) return;
-      if (e.key === "ArrowRight" && beat && beat.kind !== "action") {
-        if (beat.kind === "recap") return;
-        if ("advance" in beat && beat.advance === "click") {
-          trackTourBeatAdvanced({
-            adventure_id: adventure.id,
-            beat_index: beatIndex,
-            beat_kind: beat.kind,
-          });
-          advanceRef.current();
-        }
-      } else if (e.key === "Escape") {
+      if (e.key === "Escape") {
         toggleCollapse();
+        return;
       }
+      if (e.key !== "ArrowRight") return;
+      runNextRef.current();
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [adventure, beat, beatIndex, toggleCollapse]);
+  }, [toggleCollapse]);
 
-  if (!mounted || !adventure || !beat) return null;
+  const isClickGatedAction =
+    !!beat && beat.kind === "action" && beat.advance === "click";
 
   const canAdvanceByClick =
-    beat.kind === "narrate" ||
-    (beat.kind === "spotlight" && beat.advance === "click");
+    !actionRunning &&
+    !!beat &&
+    (beat.kind === "narrate" ||
+      (beat.kind === "spotlight" && beat.advance === "click") ||
+      isClickGatedAction);
 
-  function handleNext() {
+  const handleNext = async () => {
     if (!adventure || !beat) return;
+    if (actionRunning) return;
+
+    if (beat.kind === "action" && beat.advance === "click") {
+      setRunningOnBeat(beatIndex);
+      const ctx = makeTourContext(router, analytics);
+      try {
+        await beat.do(ctx);
+      } catch (err) {
+        console.warn("[tour] action beat failed:", err);
+      }
+      trackTourBeatAdvanced({
+        adventure_id: adventure.id,
+        beat_index: beatIndex,
+        beat_kind: beat.kind,
+      });
+      setRunningOnBeat(null);
+      advanceRef.current();
+      return;
+    }
+
     trackTourBeatAdvanced({
       adventure_id: adventure.id,
       beat_index: beatIndex,
       beat_kind: beat.kind,
     });
     advance();
-  }
+  };
+
+  useEffect(() => {
+    handleNextRef.current = handleNext;
+  });
+
+  if (!mounted || !adventure || !beat) return null;
 
   function handleExit() {
     if (!adventure) return;
