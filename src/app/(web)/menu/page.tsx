@@ -2,10 +2,6 @@
 
 import { Suspense, useState, useMemo, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
-import { DeliveryBanner } from "@/components/layout/delivery-banner";
-import { CartDrawer } from "@/components/cart/cart-drawer";
 import { CategoryNav } from "@/components/menu/category-nav";
 import { ProductGrid } from "@/components/menu/product-grid";
 import { NextBestOffer } from "@/components/segment/next-best-offer";
@@ -95,35 +91,27 @@ function MenuPageInner() {
   }, [activeCategory, filteredProducts]);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <DeliveryBanner />
-      <CartDrawer />
-
+    <>
       <CategoryNav
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
 
-      <main className="flex-1">
-        <div className="mx-auto max-w-7xl px-4 py-6">
-          <NextBestOffer />
+      <div className="mx-auto max-w-7xl px-4 py-6">
+        <NextBestOffer />
 
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              {heading}
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {count} {count === 1 ? "item" : "items"}
-            </p>
-          </div>
-
-          <ProductGrid products={filteredProducts} />
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            {heading}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {count} {count === 1 ? "item" : "items"}
+          </p>
         </div>
-      </main>
 
-      <Footer />
-    </div>
+        <ProductGrid products={filteredProducts} />
+      </div>
+    </>
   );
 }
 
