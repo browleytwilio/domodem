@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useCartStore } from "@/stores/cart-store";
 import { useSegmentStore } from "@/stores/segment-store";
 import { analytics } from "@/lib/segment/bus";
 import { computeTraits, evaluateAudiences } from "@/lib/segment/audiences";
 import { classifyStage } from "@/lib/segment/journey";
 import { setupCartBroadcast } from "@/lib/segment/cart-broadcast";
+import { useIsHydrated } from "@/lib/use-is-hydrated";
 import { DemoFab } from "./demo-fab";
 import { DemoToolbar } from "./demo-toolbar";
 import { EventInspector } from "./event-inspector";
-import { CartAbandonmentNudge } from "./cart-abandonment-nudge";
+import { AudienceToastNudge } from "./audience-toast-nudge";
 
 export function SegmentProvider({ children }: { children: React.ReactNode }) {
   const hydrateEvents = useSegmentStore((s) => s.hydrateEvents);
@@ -23,11 +24,7 @@ export function SegmentProvider({ children }: { children: React.ReactNode }) {
   const setComputedTraits = useSegmentStore((s) => s.setComputedTraits);
   const advanceJourney = useSegmentStore((s) => s.advanceJourney);
   const prevAudiencesRef = useRef(audiences);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsHydrated();
 
   useEffect(() => {
     return setupCartBroadcast();
@@ -97,7 +94,7 @@ export function SegmentProvider({ children }: { children: React.ReactNode }) {
           <DemoToolbar />
           <DemoFab />
           <EventInspector />
-          <CartAbandonmentNudge />
+          <AudienceToastNudge />
         </>
       )}
     </>
