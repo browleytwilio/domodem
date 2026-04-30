@@ -580,3 +580,25 @@ export function trackCheckoutStepCompleted(
 export function trackPaymentInfoEntered(paymentMethod: string): void {
   analytics.track("Payment Info Entered", { payment_method: paymentMethod });
 }
+
+// ---------------------------------------------------------------------------
+// Demo cross-surface events
+// ---------------------------------------------------------------------------
+
+export function trackKioskSessionStarted(opts: {
+  identified: boolean;
+  persona_id?: string;
+}): void {
+  analytics.track("Kiosk Session Started", {
+    identified: opts.identified,
+    ...(opts.persona_id !== undefined && { persona_id: opts.persona_id }),
+  });
+}
+
+export function trackKioskIdleReset(): void {
+  analytics.track("Kiosk Idle Reset");
+}
+
+export function trackModeSwitched(from: string, to: string): void {
+  analytics.track("Mode Switched", { from, to });
+}
