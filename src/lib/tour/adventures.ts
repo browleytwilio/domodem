@@ -50,15 +50,29 @@ export const ADVENTURES: Adventure[] = [
         advance: "click",
       },
       {
-        kind: "multi-surface",
-        focus: "mobile",
-        copy: "She opens the mobile app. Same profile, same preferences — the reorder strip is already set up.",
+        kind: "action",
+        copy: "She opens the mobile app…",
+        advance: "auto",
+        do: async (ctx) => {
+          await navigate(ctx, "/m");
+        },
+      },
+      {
+        kind: "narrate",
+        copy: "Same profile, same loyalty tier, same preferences. The reorder strip is already populated — because it's her profile, not a new device.",
         advance: "click",
       },
       {
-        kind: "multi-surface",
-        focus: "kiosk",
-        copy: "She walks into a store. Scans her loyalty QR. The kiosk already knows her before she taps anything.",
+        kind: "action",
+        copy: "She walks into a store…",
+        advance: "auto",
+        do: async (ctx) => {
+          await navigate(ctx, "/kiosk");
+        },
+      },
+      {
+        kind: "narrate",
+        copy: "The kiosk already knows her before she taps anything. No sign-in. No reauth. One profile, live across surfaces.",
         advance: "click",
       },
       {
@@ -189,18 +203,18 @@ export const ADVENTURES: Adventure[] = [
       },
       {
         kind: "action",
-        copy: "Setting Sarah up with an empty cart…",
+        copy: "Setting Sarah up on the menu with an empty cart…",
         advance: "auto",
         do: async (ctx) => {
           await seedPersona(ctx, "sarah_vip");
           const { useCartStore } = await import("@/stores/cart-store");
           useCartStore.getState().clearCart();
+          await navigate(ctx, "/menu");
         },
       },
       {
-        kind: "multi-surface",
-        focus: "web",
-        copy: "She adds a Meat Lovers on the web. Watch the mobile and kiosk panes on the right.",
+        kind: "narrate",
+        copy: "She's on the web. She adds a Meat Lovers to her cart.",
         advance: "click",
       },
       {
@@ -230,9 +244,16 @@ export const ADVENTURES: Adventure[] = [
         },
       },
       {
-        kind: "multi-surface",
-        focus: "mobile",
-        copy: "She leaves the house. Same cart on her phone — no re-add, no restore button. Now she adds a side.",
+        kind: "action",
+        copy: "She leaves the house and opens the mobile app…",
+        advance: "auto",
+        do: async (ctx) => {
+          await navigate(ctx, "/m/menu");
+        },
+      },
+      {
+        kind: "narrate",
+        copy: "Same cart on her phone — no re-add, no restore button. Watch the cart badge. Now she adds a side.",
         advance: "click",
       },
       {
@@ -260,9 +281,16 @@ export const ADVENTURES: Adventure[] = [
         },
       },
       {
-        kind: "multi-surface",
-        focus: "kiosk",
-        copy: "She walks into the store. The kiosk already has her cart. She taps a drink to finish the order.",
+        kind: "action",
+        copy: "She walks into the store and taps the kiosk…",
+        advance: "auto",
+        do: async (ctx) => {
+          await navigate(ctx, "/kiosk/menu");
+        },
+      },
+      {
+        kind: "narrate",
+        copy: "The kiosk already has her cart. Two items, same profile. She taps a drink to finish the order.",
         advance: "click",
       },
       {

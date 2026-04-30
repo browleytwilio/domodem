@@ -62,7 +62,7 @@ export function TourProvider() {
 
   useEffect(() => {
     if (!adventure || !beat) return;
-    if (beat.kind !== "spotlight" && beat.kind !== "multi-surface") return;
+    if (beat.kind !== "spotlight") return;
     if (beat.advance === "click" || beat.advance === "auto") return;
     const onEvent = beat.advance.onEvent;
 
@@ -113,8 +113,7 @@ export function TourProvider() {
 
   const canAdvanceByClick =
     beat.kind === "narrate" ||
-    ((beat.kind === "spotlight" || beat.kind === "multi-surface") &&
-      beat.advance === "click");
+    (beat.kind === "spotlight" && beat.advance === "click");
 
   function handleNext() {
     if (!adventure || !beat) return;

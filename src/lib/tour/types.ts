@@ -8,8 +8,6 @@ export type AdventureId =
   | "tracking-plan"
   | "cart-rescue";
 
-export type SurfaceId = "web" | "mobile" | "kiosk";
-
 export type BeatAdvance = "click" | "auto" | { onEvent: string };
 
 export interface TourContext {
@@ -31,12 +29,6 @@ export type Beat =
       do: (ctx: TourContext) => Promise<void>;
       copy: string;
       advance: "auto";
-    }
-  | {
-      kind: "multi-surface";
-      focus: SurfaceId;
-      copy: string;
-      advance: BeatAdvance;
     }
   | {
       kind: "recap";

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ChevronRight, X, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Adventure, Beat } from "@/lib/tour/types";
 
@@ -91,14 +90,7 @@ export function NarratorPanel({
           {beat.kind === "recap" ? (
             <RecapBody beat={beat} onExit={onExit} />
           ) : (
-            <>
-              <p className="whitespace-pre-wrap">{"copy" in beat ? beat.copy : ""}</p>
-              {beat.kind === "multi-surface" && (
-                <Badge variant="outline" className="w-fit">
-                  Focus: {beat.focus}
-                </Badge>
-              )}
-            </>
+            <p className="whitespace-pre-wrap">{"copy" in beat ? beat.copy : ""}</p>
           )}
 
           {canAdvanceByClick && beat.kind !== "recap" && (
