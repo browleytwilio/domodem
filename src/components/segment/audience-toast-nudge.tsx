@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useSegmentStore } from "@/stores/segment-store";
+import { useTourStore } from "@/stores/tour-store";
 
 interface ToastDef {
   audienceId: string;
@@ -48,6 +49,7 @@ const TOASTS: ToastDef[] = [
 export function AudienceToastNudge() {
   const demoMode = useSegmentStore((s) => s.demoModeEnabled);
   const audiences = useSegmentStore((s) => s.audiences);
+  const tourActive = useTourStore((s) => s.active !== null);
   const firedRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -59,6 +61,8 @@ export function AudienceToastNudge() {
     for (const def of TOASTS) {
       if (firedRef.current.has(def.audienceId)) continue;
       if (!memberIds.has(def.audienceId)) continue;
+
+      const idleMs = tourActive ? Math.min(def.idleMs, 15_000) : def.idleMs;
 
       const timer = setTimeout(() => {
         firedRef.current.add(def.audienceId);
@@ -74,7 +78,7 @@ export function AudienceToastNudge() {
           },
           duration: def.duration ?? 15_000,
         });
-      }, def.idleMs);
+      }, idleMs);
 
       timers.push(timer);
     }
@@ -82,7 +86,7 @@ export function AudienceToastNudge() {
     return () => {
       for (const t of timers) clearTimeout(t);
     };
-  }, [audiences, demoMode]);
+  }, [audiences, demoMode, tourActive]);
 
   return null;
 }
