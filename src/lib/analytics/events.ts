@@ -602,3 +602,37 @@ export function trackKioskIdleReset(): void {
 export function trackModeSwitched(from: string, to: string): void {
   analytics.track("Mode Switched", { from, to });
 }
+
+// ---------------------------------------------------------------------------
+// Tour (self-demo walkthrough)
+// ---------------------------------------------------------------------------
+
+export function trackTourStarted(props: {
+  adventure_id: string;
+  guest_name: string;
+}): void {
+  analytics.track("Tour Started", props);
+}
+
+export function trackTourBeatAdvanced(props: {
+  adventure_id: string;
+  beat_index: number;
+  beat_kind: string;
+}): void {
+  analytics.track("Tour Beat Advanced", props);
+}
+
+export function trackTourCompleted(props: {
+  adventure_id: string;
+  elapsed_ms: number;
+}): void {
+  analytics.track("Tour Completed", props);
+}
+
+export function trackTourExited(props: {
+  adventure_id: string;
+  beat_index: number;
+  reason: "user_dismissed" | "reset";
+}): void {
+  analytics.track("Tour Exited", props);
+}
