@@ -51,8 +51,6 @@ export type AdventureId =
   | "tracking-plan"
   | "cart-rescue";
 
-export type AdventureSlug = AdventureId;
-
 export type SurfaceId = "web" | "mobile" | "kiosk";
 
 export type BeatAdvance = "click" | "auto" | { onEvent: string };
@@ -91,7 +89,6 @@ export type Beat =
 
 export interface Adventure {
   id: AdventureId;
-  slug: AdventureSlug;
   title: string;
   tagline: string;
   estMinutes: number;
@@ -714,7 +711,6 @@ async function seedPersona(ctx: TourContext, id: string) {
 export const ADVENTURES: Adventure[] = [
   {
     id: "meet-sarah",
-    slug: "meet-sarah",
     title: "Meet Sarah. Everywhere.",
     tagline: "One customer, three surfaces, one profile.",
     estMinutes: 3,
@@ -781,7 +777,6 @@ export const ADVENTURES: Adventure[] = [
 
   {
     id: "build-audience",
-    slug: "build-audience",
     title: "Build an audience in 60 seconds.",
     tagline: "Real-time, not batch.",
     estMinutes: 2,
@@ -849,7 +844,6 @@ export const ADVENTURES: Adventure[] = [
 
   {
     id: "tracking-plan",
-    slug: "tracking-plan",
     title: "One tracking plan, every surface.",
     tagline: "Write the spec once, honor it everywhere.",
     estMinutes: 3,
@@ -925,7 +919,6 @@ export const ADVENTURES: Adventure[] = [
 
   {
     id: "cart-rescue",
-    slug: "cart-rescue",
     title: "The cart abandonment rescue.",
     tagline: "One audience, every channel.",
     estMinutes: 3,
@@ -1936,7 +1929,7 @@ export function TourLanding({ guestName }: { guestName: string }) {
     setDemoMode(true);
     start(a.id, guestName || undefined);
     trackTourStarted({ adventure_id: a.id, guest_name: guestName || "guest" });
-    router.push(`/tour/${a.slug}`);
+    router.push(`/tour/${a.id}`);
   }
 
   const greeting = guestName ? `, ${guestName}` : "";

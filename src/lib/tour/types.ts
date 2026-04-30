@@ -8,8 +8,6 @@ export type AdventureId =
   | "tracking-plan"
   | "cart-rescue";
 
-export type AdventureSlug = AdventureId;
-
 export type SurfaceId = "web" | "mobile" | "kiosk";
 
 export type BeatAdvance = "click" | "auto" | { onEvent: string };
@@ -48,7 +46,6 @@ export type Beat =
 
 export interface Adventure {
   id: AdventureId;
-  slug: AdventureSlug;
   title: string;
   tagline: string;
   estMinutes: number;
