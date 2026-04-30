@@ -79,11 +79,19 @@ Each adventure is a typed array of beats in `src/lib/tour/adventures.ts`. Beats 
 ### 5.1 Beat type
 
 ```ts
+type AdventureId =
+  | "meet-sarah"
+  | "build-audience"
+  | "tracking-plan"
+  | "cart-rescue";
+
+type BeatAdvance = "click" | "auto" | { onEvent: string };
+
 type Beat =
   | { kind: "narrate"; copy: string; advance: "click" }
-  | { kind: "spotlight"; target: string; copy: string; advance: "click" | { onEvent: string } }
+  | { kind: "spotlight"; target: string; copy: string; advance: BeatAdvance }
   | { kind: "action"; do: (ctx: TourContext) => Promise<void>; copy: string; advance: "auto" }
-  | { kind: "multi-surface"; focus: "web" | "mobile" | "kiosk"; copy: string; advance: "click" }
+  | { kind: "multi-surface"; focus: "web" | "mobile" | "kiosk"; copy: string; advance: BeatAdvance }
   | { kind: "recap"; bullets: string[]; ctas: Array<{ label: string; href: string }> };
 ```
 
@@ -97,11 +105,11 @@ type Beat =
 
 1. `narrate` — "Meet Sarah Thompson. She's a Gold-tier customer with 12 orders. She opens the Domino's site from her couch."
 2. `action` — load `sarah_vip` persona via `findPersona("sarah_vip").seed()`.
-3. `spotlight` target `tour-personalization-banner` — "Her home page is already personalized. This copy swapped based on her `loyalty_tier` trait."
-4. `spotlight` target `tour-identity-panel` — "One `userId`, live traits. Open on any screen."
-5. `multi-surface` focus `mobile` — "Same customer, now on the mobile app. Notice her reorder strip is already populated."
-6. `multi-surface` focus `kiosk` — "At the store, the kiosk attract screen. When she scans her loyalty QR, the kiosk session is already her — no sign-in."
-7. `spotlight` target `tour-event-inspector` — "Every event tagged with `context.app.name`. Same person, three surfaces, one profile."
+3. `spotlight` target `tour-personalization-banner` advance `"click"` — "Her home page is already personalized. This copy swapped based on her `loyalty_tier` trait."
+4. `spotlight` target `tour-identity-panel` advance `"click"` — "One `userId`, live traits. Open on any screen."
+5. `multi-surface` focus `mobile` advance `"click"` — "Same customer, now on the mobile app. Notice her reorder strip is already populated."
+6. `multi-surface` focus `kiosk` advance `"click"` — "At the store, the kiosk attract screen. When she scans her loyalty QR, the kiosk session is already her — no sign-in."
+7. `spotlight` target `tour-event-inspector` advance `"click"` — "Every event tagged with `context.app.name`. Same person, three surfaces, one profile."
 8. `recap` — bullets on unified identity, identity resolution, source attribution; CTAs to Segment Identity docs and the tracking plan.
 
 ### 5.3 Adventure 2 — "Build an audience in 60 seconds."
@@ -113,10 +121,10 @@ type Beat =
 1. `narrate` — "We start anonymous. No account. No history. Watch the Audiences panel."
 2. `action` — `analytics.reset()`, `router.push('/deals')`.
 3. `spotlight` target `tour-audiences-panel` advance `{ onEvent: "Deal Viewed" }` — "Click any deal. I'll wait."
-4. `spotlight` target `tour-audiences-panel` — "`Deal Hunter` audience entered. That rule is live — no batch job, no overnight wait."
+4. `spotlight` target `tour-audiences-panel` advance `"click"` — "`Deal Hunter` audience entered. That rule is live — no batch job, no overnight wait."
 5. `spotlight` target `tour-audiences-panel` advance `{ onEvent: "Product Added" }` — "Add a pizza to cart. Then come back here."
-6. `spotlight` target `tour-audiences-panel` — "`Cart Abandoner` is now primed. If she leaves without checking out, the nudge fires."
-7. `spotlight` target `tour-computed-traits-panel` — "These traits recomputed after every event. `favorite_category`, `product_add_count`, `cart_value`."
+6. `spotlight` target `tour-audiences-panel` advance `"click"` — "`Cart Abandoner` is now primed. If she leaves without checking out, the nudge fires."
+7. `spotlight` target `tour-computed-traits-panel` advance `"click"` — "These traits recomputed after every event. `favorite_category`, `product_add_count`, `cart_value`."
 8. `recap` — bullets on real-time audiences, computed traits, and tracking-plan fidelity; CTAs to Segment Audiences and Engage docs.
 
 ### 5.4 Adventure 3 — "One tracking plan, every surface."
@@ -127,12 +135,12 @@ type Beat =
 
 1. `narrate` — "Most companies have different events on web, mobile, and in-store. That's why their data is a mess. Watch what happens here."
 2. `action` — pin the Event Inspector open, clear its filter.
-3. `multi-surface` focus `web` — "Add a Meat Lovers to the cart on the web surface."
-4. `spotlight` target `tour-event-inspector-latest` advance `{ onEvent: "Product Added" }` — "There's the `Product Added` event. Note the shape — `product_id`, `category`, `price`, `quantity`, `source: web`."
-5. `multi-surface` focus `mobile` — "Now the same action in the mobile app."
-6. `spotlight` target `tour-event-inspector-latest` advance `{ onEvent: "Product Added" }` — "Same event, same shape. Only `source` is different."
-7. `multi-surface` focus `kiosk` — "Now in-store on the kiosk."
-8. `spotlight` target `tour-event-inspector-latest` advance `{ onEvent: "Product Added" }` — "Identical. Your warehouse team loves you."
+3. `multi-surface` focus `web` advance `{ onEvent: "Product Added" }` — "Add a Meat Lovers to the cart on the web surface. I'll wait."
+4. `spotlight` target `tour-event-inspector-latest` advance `"click"` — "There's the `Product Added` event. Note the shape — `product_id`, `category`, `price`, `quantity`, `source: web`."
+5. `multi-surface` focus `mobile` advance `{ onEvent: "Product Added" }` — "Now the same action in the mobile app."
+6. `spotlight` target `tour-event-inspector-latest` advance `"click"` — "Same event, same shape. Only `source` is different."
+7. `multi-surface` focus `kiosk` advance `{ onEvent: "Product Added" }` — "Now in-store on the kiosk."
+8. `spotlight` target `tour-event-inspector-latest` advance `"click"` — "Identical. Your warehouse team loves you."
 9. `recap` — bullets on tracking plan as contract, protocol violations, and surface attribution; CTAs to Segment Protocols docs.
 
 ### 5.5 Adventure 4 — "The cart abandonment rescue."
@@ -143,13 +151,13 @@ type Beat =
 
 1. `narrate` — "Meet Dan. Bronze tier. One item in cart. He's about to walk away."
 2. `action` — load `dan_abandoner` persona via `findPersona("dan_abandoner").seed()`.
-3. `spotlight` target `tour-audiences-panel` — "`Cart Abandoner` audience already active from his seeded events."
+3. `spotlight` target `tour-audiences-panel` advance `"click"` — "`Cart Abandoner` audience already active from his seeded events."
 4. `narrate` — "Watch. No clicks from here. Just wait." Narrator shows a 15-second dev-shortened countdown.
 5. `spotlight` target `tour-audience-toast` advance `{ onEvent: "Abandonment Nudge Shown" }` — "The on-site toast fires automatically. Same audience, same copy rule."
 6. `action` — open a modal simulating Dan's email inbox with the same copy.
 7. `narrate` — "Same rule, different channel. You set this once in Segment Engage."
 8. `action` — advance Dan's journey to `Customer` via a mock `Order Completed` event (uses the existing helper).
-9. `spotlight` target `tour-journey-panel` — "Journey advanced. The audience and the recovery email and the journey are all driven by one source of truth."
+9. `spotlight` target `tour-journey-panel` advance `"click"` — "Journey advanced. The audience and the recovery email and the journey are all driven by one source of truth."
 10. `recap` — bullets on omni-channel personalization, journey orchestration, and single source of truth; CTAs to Engage, Journeys, and Linked Profiles docs.
 
 ## 6. State & data flow
